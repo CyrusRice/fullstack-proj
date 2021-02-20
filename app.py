@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+import chess
 
 app = Flask(__name__)
 
@@ -11,6 +12,8 @@ def home():
 
 @app.route('/about/')
 def about():
+    board = chess.Board()
+    print(board.legal_moves)
     return render_template("about.html")
 
 if __name__ == "__main__":

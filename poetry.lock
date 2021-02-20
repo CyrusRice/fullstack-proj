@@ -89,7 +89,7 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "ce14d63e03cf02a812bed254b07a887816f17552df7776469c0ed92b6ccf9d05"
+content-hash = "982b505faf2e8ece7b81d351345e9ceea6764f018908a0af3b84295cb85b0a73"
 
 [metadata.files]
 chess = [
