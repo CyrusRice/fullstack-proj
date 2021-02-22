@@ -1,0 +1,25 @@
+{
+  "name": "fullstack-proj",
+  "version": "1.0.0",
+  "description": "- Install poetry if you havn't already with below command\r     - `curl -SSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python`",
+  "main": "index.js",
+  "dependencies": {
+    "chessboardjs": "0.0.1",
+    "chessjs": "0.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CyrusRice/fullstack-proj.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CyrusRice/fullstack-proj/issues"
+  },
+  "homepage": "https://github.com/CyrusRice/fullstack-proj#readme"
+}
