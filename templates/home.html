@@ -16,9 +16,9 @@
             <input
               type="text"
               class="form-control"
-              id="name"
-              name="name"
-              placeholder="userid"
+              id="userid"
+              name="userid"
+              placeholder="User ID"
               required
             />
           </div>
@@ -28,7 +28,7 @@
               class="form-control"
               id="password"
               name="password"
-              placeholder="password"
+              placeholder="Password"
               required
             />
           </div>
@@ -48,6 +48,7 @@
               class="btn btn-primary mt-2 mb-5"
               value="Create New Account"
               id="signup"
+              onclick="location.href = `{{ url_for('signup') }}`;"
             />            
           </div>  
 
