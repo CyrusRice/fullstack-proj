@@ -6,8 +6,11 @@
 - Install dependencies and create python virtual environment 
     - `poetry install`
 
-- To use the alrready created python virtual environment 
+- To use the already created python virtual environment 
     - `poetry env use python`
+
+- Install MongoDB
+    - https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
 
 - Start server with command
     - `python app.py`

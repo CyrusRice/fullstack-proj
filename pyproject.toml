@@ -7,9 +7,8 @@ authors = ["Your Name <you@example.com>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 Flask = "^1.1.2"
-python-chess = {extras = ["uci", "gaviota"], version = "^1.999"}
-wheel = "^0.36.2"
-flask-mongoengine = "^1.0.0"
+python-chess = "^1.999"
+pymongo = "^3.11.3"
 
 [tool.poetry.dev-dependencies]
 
