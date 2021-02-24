@@ -50,17 +50,15 @@ h2 {
   letter-spacing: -2px;
 }
 
-form a,
 h3 {
   font-size: 25px;
   font-weight: 100;
-  margin: 10px;
-  text-align: left;
+  text-align: center;
+  letter-spacing: -2px;
   text-decoration: underline;
-  letter-spacing: -1px;
   color: blue;
-
 }
+
 
 .menu {
   float: right;
@@ -81,26 +79,27 @@ h3 {
 }
 
 .col-4,
+.col-3,
+.col-9,
 .col-8 {
   background-color: lightblue;
 }
 
 form input[type="submit"],
 form input[type="button"] {
-  width: 45%;
+  width: 90%;
   height: 50px;
+  margin-left: 5%;
   background-color: teal;
-  margin: 10px;
   font-size: 25px;
 }
 
 form label {
-  color:maroon;
-  font-size:20px;
+  color: maroon;
+  font-size: 20px;
   text-decoration: underline;
   margin-top: 5px;
   margin-bottom: 5px;
-
 }
 
 form input[type="button"] {
