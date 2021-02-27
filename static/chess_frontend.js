@@ -1,5 +1,5 @@
 // Variables
-var config = {
+let config = {
   draggable: true,
   pieceTheme: 'static/img/{piece}.png',
   showNotation: false,
@@ -7,11 +7,11 @@ var config = {
   onDrop: onDrop
 }
 
-var board = Chessboard('myBoard', config)
+let board = Chessboard('myBoard', config)
 const chess = new Chess();
-var gameOver = false;
+let gameOver = false;
 
-var socket = io();
+let socket = io();
 
 // sockets
 /*socket.on('my response', function(msg) {
@@ -40,7 +40,7 @@ $('#startPositionBtn').on('click', function newGame() {
 function onDrop (source, target, piece, newPos, oldPos, orientation) {
   // Move piece if valid move
   const obj = {from : source, to : target};
-  var moveSuccess = chess.move(obj);
+  let moveSuccess = chess.move(obj);
   if (moveSuccess === null || gameOver) 
     return 'snapback';
   // Stop board movement if game over
