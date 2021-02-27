@@ -49,6 +49,7 @@ def broadcastFen(message):
     #print(message['fen'])
 
 
+
 if __name__ == "__main__":
     socketio.run(app, host='0.0.0.0')
     #app.run(debug=True)
