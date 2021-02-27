@@ -1,4 +1,19 @@
 [[package]]
+name = "bidict"
+version = "0.21.2"
+description = "The bidirectional mapping library for Python."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+coverage = ["coverage (<6)", "pytest-cov (<3)"]
+dev = ["setuptools-scm", "hypothesis (<6)", "py (<2)", "pytest (<7)", "pytest-benchmark (>=3.2.0,<4)", "sortedcollections (<2)", "sortedcontainers (<3)", "Sphinx (<4)", "sphinx-autodoc-typehints (<2)", "coverage (<6)", "pytest-cov (<3)", "pre-commit (<3)", "tox (<4)"]
+docs = ["Sphinx (<4)", "sphinx-autodoc-typehints (<2)"]
+precommit = ["pre-commit (<3)"]
+test = ["hypothesis (<6)", "py (<2)", "pytest (<7)", "pytest-benchmark (>=3.2.0,<4)", "sortedcollections (<2)", "sortedcontainers (<3)", "Sphinx (<4)", "sphinx-autodoc-typehints (<2)"]
+
+[[package]]
 name = "chess"
 version = "1.4.0"
 description = "A chess library with move generation and validation, Polyglot opening book probing, PGN reading and writing, Gaviota tablebase probing, Syzygy tablebase probing, and XBoard/UCI engine communication."
@@ -32,6 +47,18 @@ Werkzeug = ">=0.15"
 dev = ["pytest", "coverage", "tox", "sphinx", "pallets-sphinx-themes", "sphinxcontrib-log-cabinet", "sphinx-issues"]
 docs = ["sphinx", "pallets-sphinx-themes", "sphinxcontrib-log-cabinet", "sphinx-issues"]
 dotenv = ["python-dotenv"]
+
+[[package]]
+name = "flask-socketio"
+version = "5.0.1"
+description = "Socket.IO integration for Flask applications"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+Flask = ">=0.9"
+python-socketio = ">=5.0.2"
 
 [[package]]
 name = "itsdangerous"
@@ -93,6 +120,34 @@ python-versions = "*"
 chess = ">=1,<2"
 
 [[package]]
+name = "python-engineio"
+version = "4.0.0"
+description = "Engine.IO server"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+asyncio_client = ["aiohttp (>=3.4)"]
+client = ["requests (>=2.21.0)", "websocket-client (>=0.54.0)"]
+
+[[package]]
+name = "python-socketio"
+version = "5.0.4"
+description = "Socket.IO server"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+bidict = ">=0.21.0"
+python-engineio = ">=4"
+
+[package.extras]
+asyncio_client = ["aiohttp (>=3.4)", "websockets (>=7.0)"]
+client = ["requests (>=2.21.0)", "websocket-client (>=0.54.0)"]
+
+[[package]]
 name = "werkzeug"
 version = "1.0.1"
 description = "The comprehensive WSGI web application library."
@@ -107,9 +162,13 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "3caf40eeb5040656bbab3d3af51fb54153e0bbcb99e7aaa78908e0830899ee04"
+content-hash = "61312964913dd0b45f8a1b7f7601264f0acdf6a012eb3cba4e9b2934cec72a9f"
 
 [metadata.files]
+bidict = [
+    {file = "bidict-0.21.2-py2.py3-none-any.whl", hash = "sha256:929d056e8d0d9b17ceda20ba5b24ac388e2a4d39802b87f9f4d3f45ecba070bf"},
+    {file = "bidict-0.21.2.tar.gz", hash = "sha256:4fa46f7ff96dc244abfc437383d987404ae861df797e2fd5b190e233c302be09"},
+]
 chess = [
     {file = "chess-1.4.0-py3-none-any.whl", hash = "sha256:823ab1bc8b1674e37e77e8d4ff8e758f37551dcdee4d106438fa22f12d3a7d9b"},
     {file = "chess-1.4.0.tar.gz", hash = "sha256:590c979f25a26b8c621c6c312278fb5ba6cd6bdf39af9bd2553a7f1732295120"},
@@ -121,6 +180,10 @@ click = [
 flask = [
     {file = "Flask-1.1.2-py2.py3-none-any.whl", hash = "sha256:8a4fdd8936eba2512e9c85df320a37e694c93945b33ef33c89946a340a238557"},
     {file = "Flask-1.1.2.tar.gz", hash = "sha256:4efa1ae2d7c9865af48986de8aeb8504bf32c7f3d6fdc9353d34b21f4b127060"},
+]
+flask-socketio = [
+    {file = "Flask-SocketIO-5.0.1.tar.gz", hash = "sha256:5c4319f5214ada20807857dc8fdf3dc7d2afe8d6dd38f5c516c72e2be47d2227"},
+    {file = "Flask_SocketIO-5.0.1-py2.py3-none-any.whl", hash = "sha256:5d9a4438bafd806c5a3b832e74b69758781a8ee26fb6c9b1dbdda9b4fced432e"},
 ]
 itsdangerous = [
     {file = "itsdangerous-1.1.0-py2.py3-none-any.whl", hash = "sha256:b12271b2047cb23eeb98c8b5622e2e5c5e9abd9784a153e9d8ef9cb4dd09d749"},
@@ -253,6 +316,14 @@ pymongo = [
 python-chess = [
     {file = "python-chess-1.999.tar.gz", hash = "sha256:8cad0388c42242d890ac6368ad64def15cd0165db033df0ad479492e266e5e6c"},
     {file = "python_chess-1.999-py3-none-any.whl", hash = "sha256:93b562f8f1124cb7bf56fb095e18743758e69dc6a028ccda0badcaa5c59d88c8"},
+]
+python-engineio = [
+    {file = "python-engineio-4.0.0.tar.gz", hash = "sha256:9f34afa4170f5ba6e3d9ff158752ccf8fbb2145f16554b2f0fc84646675be99a"},
+    {file = "python_engineio-4.0.0-py2.py3-none-any.whl", hash = "sha256:33f7a214be5db35c867e97027bfe63676cb003d82aa17a607612b25ba5d84e5b"},
+]
+python-socketio = [
+    {file = "python-socketio-5.0.4.tar.gz", hash = "sha256:f53fd0d5bd9f75a70492062f4ae6195ab5d34d67a29024d740f25e468392893e"},
+    {file = "python_socketio-5.0.4-py2.py3-none-any.whl", hash = "sha256:870f8b00a63ef7c9a1f85fd70028624867bf246115e82625f28ef79def8847bb"},
 ]
 werkzeug = [
     {file = "Werkzeug-1.0.1-py2.py3-none-any.whl", hash = "sha256:2de2a5db0baeae7b2d2664949077c2ac63fbd16d98da0ff71837f7d1dea3fd43"},

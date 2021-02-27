@@ -32,7 +32,19 @@ dbModels['users']['schema'] = {
         'type': 'string',
         'minlength': 1,
         'required' : True,
-    },              
+    }, 
+    'friends' : {
+        'type': 'array',
+        'required' : True,
+    },
+    'communities' : {
+        'type': 'array',
+        'required' : True,
+    },
+    'games' : {
+        'type': 'array',
+        'required' : True,
+    },                         
 }
 
 dbModels['online'] = dict()
@@ -184,3 +196,5 @@ for dbModelKey in dbModels:
             pass
 
         command_result = db.command(OrderedDict(query))
+
+
