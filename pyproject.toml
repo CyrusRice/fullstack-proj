@@ -15,6 +15,9 @@ Flask-Session = "^0.3.2"
 gevent = "^21.1.2"
 gevent-websocket = "^0.10.1"
 pywebpush = "^1.11.0"
+Flask-Table = "^0.5.0"
+Flask-Bcrypt = "^0.7.1"
+bcrypt = "^3.2.0"
 
 [tool.poetry.dev-dependencies]
 

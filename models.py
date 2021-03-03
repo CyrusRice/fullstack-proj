@@ -29,7 +29,7 @@ dbModels['users']['schema'] = {
         'required' : True,
     },   
     'password' : {
-        'type': 'string',
+        'type': 'binData',
         'minlength': 1,
         'required' : True,
     }, 

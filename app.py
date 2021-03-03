@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, request,redirect,flash
 from flask_socketio import SocketIO, emit
+import bcrypt
 import chess
 from models import *
 
@@ -20,9 +21,22 @@ def about():
 def signup():
     return render_template("signup.html")
 
-@app.route('/account')
-def account():
-    return render_template("account.html")
+@app.route('/account/<userid>')
+def account(userid):
+    return render_template("account.html",userid=userid)
+
+@app.route('/signin', methods = ['POST'])
+def signin():
+    if request.method == 'POST':
+        userid = request.form['userid']
+        password = request.form['password'].encode('utf-8')
+        useridCount = db['users'].count_documents({'userid': userid})
+        if useridCount > 0:
+            user = db['users'].find({'userid': userid})[0]
+            if bcrypt.checkpw(password,user['password']):
+                return redirect(url_for('account',userid=userid))
+        return render_template("home.html")
+
 
 @app.route('/createAccount', methods = ['POST'])
 def createAccount():
@@ -30,14 +44,21 @@ def createAccount():
         newuser = dict()
         newuser['firstname'] = request.form['firstname'] 
         newuser['lastname'] = request.form['lastname'] 
-        newuser['email'] = request.form['email'] 
-        newuser['userid'] = request.form['userid'] 
-        newuser['password'] = request.form['password']
+        newuser['email'] = request.form['email']
+
+        userid = request.form['userid']
+        newuser['userid'] = userid
+
+        password = request.form['password'].encode('utf-8')
+        salt = bcrypt.gensalt()
+        pass_hash = bcrypt.hashpw(password,salt)
+        newuser['password'] = pass_hash
+
         newuser['friends'] = []
         newuser['communities'] = []
         newuser['games'] = []
 
-        useridCount = db['users'].count_documents({'userid': request.form['userid']})
+        useridCount = db['users'].count_documents({'userid': userid})
         emailCount = db['users'].count_documents({'email': request.form['email']})
 
         if useridCount > 0:
@@ -48,9 +69,9 @@ def createAccount():
 
         else:
             db['users'].insert_one(newuser)
-            return redirect(url_for('account'))
+            return redirect(url_for('account',userid=userid))
 
-        return render_template("signup.html")
+        return redirect(url_for('signup'))
 
 @app.route('/forgotPassword')
 def forgotPassword():
