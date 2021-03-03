@@ -1,10 +1,11 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request,redirect,flash
 from flask_socketio import SocketIO, emit
 import chess
 from models import *
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(app,log_output=True,logger=True)
 
 @app.route('/')
 def home():
@@ -19,6 +20,10 @@ def about():
 def signup():
     return render_template("signup.html")
 
+@app.route('/account')
+def account():
+    return render_template("account.html")
+
 @app.route('/createAccount', methods = ['POST'])
 def createAccount():
     if request.method == 'POST':
@@ -31,7 +36,20 @@ def createAccount():
         newuser['friends'] = []
         newuser['communities'] = []
         newuser['games'] = []
-        db['users'].insert_one(newuser)
+
+        useridCount = db['users'].count_documents({'userid': request.form['userid']})
+        emailCount = db['users'].count_documents({'email': request.form['email']})
+
+        if useridCount > 0:
+            flash('userid already exists, pick a different one')
+
+        elif emailCount > 0:
+            flash('email already exists, pick a different one')
+
+        else:
+            db['users'].insert_one(newuser)
+            return redirect(url_for('account'))
+
         return render_template("signup.html")
 
 @app.route('/forgotPassword')
@@ -49,5 +67,5 @@ def broadcastFen(message):
 
 
 if __name__ == "__main__":
-    socketio.run(app, host='0.0.0.0')
+    socketio.run(app,debug=True)
     #app.run(debug=True)

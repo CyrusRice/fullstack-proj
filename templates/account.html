@@ -1,0 +1,130 @@
+{%extends "layout.html"%} {% block content %}
+<script defer src="../static/chess_frontend.js"></script>
+<script
+  src="https://kit.fontawesome.com/7d687e7439.js"
+  crossorigin="anonymous"
+></script>
+<div class="home">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-9 border">
+        <h2>GAME ARENA</h2>
+        <hr class="mt-4 mb-3" />
+        <div id="myBoard" class="ml-3" style="width: 30%"></div>
+        <button class="ml-3 mt-3 mb-3" id="startPositionBtn">
+          Start Position
+        </button>
+      </div>
+      <div class="col-3 border">
+        <div class="input-group mb-0">
+          <input
+            id="search-input"
+            type="search"
+            class="form-control mt-1"
+            placeholder="search"
+          />
+          <button
+            id="search-button"
+            type="button"
+            class="btn btn-primary mr-2 mt-1"
+          >
+            <span class="fas fa-search fa-1x"></span>
+          </button>
+          <button
+            id="settings-button"
+            type="button"
+            class="btn btn-primary mr-2 mt-1"
+          >
+            <span class="fas fa-user-cog fa-1x"></span>
+          </button>
+          <button id="logout-button" type="button" class="btn btn-primary mt-1">
+            <span class="fas fa-sign-out-alt fa-1x"></span>
+          </button>
+        </div>
+        <h2 class="mt-1">ACCOUNT</h2>
+        <hr class="mt-1 mb-3" />
+        <!-- Tabs nav -->
+        <ul class="nav nav-tabs mb-3" id="userinfo" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link active"
+              id="friendsTab"
+              data-toggle="tab"
+              href="#friends"
+              >Friends</a
+            >
+          </li>
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link"
+              id="CommunitiesTab"
+              data-toggle="tab"
+              href="#communities"
+              >Communities</a
+            >
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="gamesTab" data-toggle="tab" href="#games"
+              >Games</a
+            >
+          </li>
+        </ul>
+        <!-- Tabs nav -->
+
+        <!-- Tabs content -->
+        <div class="tab-content" id="userinfo-content">
+          <div
+            class="tab-pane fade show active"
+            id="friends"
+            role="tabpanel"
+            aria-labelledby="friendsTab"
+          >
+            <button
+              id="settings-button"
+              type="button"
+              class="btn btn-primary float-right mr-2 mt-1"
+            >
+              <span class="fas fa-user-plus fa-1x"></span>
+            </button>
+            <button
+              id="settings-button"
+              type="button"
+              class="btn btn-primary float-right mr-2 mt-1 mb-1"
+            >
+              <span class="fas fa-minus-circle fa-1x"></span>
+            </button>
+            <table
+              class="table table-condensed table-bordered table-striped volumes"
+            >
+              <thead>
+                <tr>
+                  <th style="width: 70%">ID</th>
+                  <th>W</th>
+                  <th>L</th>
+                  <th>D</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="communities"
+            role="tabpanel"
+            aria-labelledby="CommunitiesTab"
+          >
+            Communities Tab content
+          </div>
+          <div
+            class="tab-pane fade"
+            id="games"
+            role="tabpanel"
+            aria-labelledby="gamesTab"
+          >
+            Games Tab content
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>{%endblock%}</div>
+</div>

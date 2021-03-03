@@ -1,19 +1,26 @@
 {%extends "layout.html"%} {% block content %}
+<script defer src="../static/js/signup.js"></script>
+
 <div class="home">
   <div class="container-fluid">
     <div class="row">
       <div class="col-9 border">
         <h2>COMUNITY NEWS</h2>
         <hr class="mt-3 mb-3" />
-        <div id="myBoard" class="ml-3" style="width: 30%"></div>
-        <button class="ml-3 mt-3 mb-3" id="startPositionBtn">
-          Start Position
-        </button>
       </div>
       <div class="col-3 border">
-        <form action="/createAccount" method="post" id="userForm">
-          <h2>CREATE ACCOUNT</h2>
+        <form action="/createAccount" method="post" id="signupForm">
+          <h2>NEW ACCOUNT</h2>
           <hr class="mt-3 mb-3" />
+          {% with messages = get_flashed_messages() %} {% if messages %} {% for
+          message in messages %}
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          {% endfor %} {% endif %} {% endwith %}
           <div class="form-group mb-5">
             <input
               type="text"
@@ -55,7 +62,7 @@
               class="form-control mb-1"
               id="password"
               name="password"
-              placeholder="password"
+              placeholder="Password"
               required
             />
             <input
@@ -69,10 +76,11 @@
           </div>
           <div class="form-group mt-3 mb-0">
             <input
-              type="submit"
+              type="button"
               class="btn btn-primary mt-2 mb-5"
               value="Create New Account"
               id="createAccount"
+              onclick="validateSignupForm()"
             />
           </div>
         </form>
