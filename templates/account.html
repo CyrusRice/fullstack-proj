@@ -9,84 +9,118 @@
     <div class="row">
       <div class="col-9 border">
         <h2>GAME ARENA</h2>
-        <hr class="mt-3 mb-3" />
+        <hr class="mt-4 mb-3" />
         <div id="myBoard" class="ml-3" style="width: 30%"></div>
         <button class="ml-3 mt-3 mb-3" id="startPositionBtn">
           Start Position
         </button>
       </div>
       <div class="col-3 border">
-        <span class="fas fa-sign-out-alt fa-2x float-right mt-1"></span>
-        <span class="fas fa-user-cog fa-2x float-right mr-2 mt-1"></span>
-        <span class="fas fa-search fa-2x float-right mr-2 mt-1"></span>
-        <h2>ACCOUNT</h2>
-        <hr class="mt-3 mb-3" />
-        <!-- Tabs navs -->
-        <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+        <div class="input-group mb-0">
+          <input
+            id="search-input"
+            type="search"
+            class="form-control mt-1"
+            placeholder="search"
+          />
+          <button
+            id="search-button"
+            type="button"
+            class="btn btn-primary mr-2 mt-1"
+          >
+            <span class="fas fa-search fa-1x"></span>
+          </button>
+          <button
+            id="settings-button"
+            type="button"
+            class="btn btn-primary mr-2 mt-1"
+          >
+            <span class="fas fa-user-cog fa-1x"></span>
+          </button>
+          <button id="logout-button" type="button" class="btn btn-primary mt-1">
+            <span class="fas fa-sign-out-alt fa-1x"></span>
+          </button>
+        </div>
+        <h2 class="mt-1">ACCOUNT</h2>
+        <hr class="mt-1 mb-3" />
+        <!-- Tabs nav -->
+        <ul class="nav nav-tabs mb-3" id="userinfo" role="tablist">
           <li class="nav-item" role="presentation">
             <a
               class="nav-link active"
-              id="ex1-tab-1"
-              data-mdb-toggle="tab"
-              href="#ex1-tabs-1"
-              role="tab"
-              aria-controls="ex1-tabs-1"
-              aria-selected="true"
+              id="friendsTab"
+              data-toggle="tab"
+              href="#friends"
               >Friends</a
             >
           </li>
           <li class="nav-item" role="presentation">
             <a
               class="nav-link"
-              id="ex1-tab-2"
-              data-mdb-toggle="tab"
-              href="#ex1-tabs-2"
-              role="tab"
-              aria-controls="ex1-tabs-2"
-              aria-selected="false"
+              id="CommunitiesTab"
+              data-toggle="tab"
+              href="#communities"
               >Communities</a
             >
           </li>
           <li class="nav-item" role="presentation">
-            <a
-              class="nav-link"
-              id="ex1-tab-3"
-              data-mdb-toggle="tab"
-              href="#ex1-tabs-3"
-              role="tab"
-              aria-controls="ex1-tabs-3"
-              aria-selected="false"
+            <a class="nav-link" id="gamesTab" data-toggle="tab" href="#games"
               >Games</a
             >
           </li>
         </ul>
-        <!-- Tabs navs -->
+        <!-- Tabs nav -->
 
         <!-- Tabs content -->
-        <div class="tab-content" id="ex1-content">
+        <div class="tab-content" id="userinfo-content">
           <div
             class="tab-pane fade show active"
-            id="ex1-tabs-1"
+            id="friends"
             role="tabpanel"
-            aria-labelledby="ex1-tab-1"
+            aria-labelledby="friendsTab"
           >
-            Friends Tab content
+            <button
+              id="settings-button"
+              type="button"
+              class="btn btn-primary float-right mr-2 mt-1"
+            >
+              <span class="fas fa-user-plus fa-1x"></span>
+            </button>
+            <button
+              id="settings-button"
+              type="button"
+              class="btn btn-primary float-right mr-2 mt-1 mb-1"
+            >
+              <span class="fas fa-minus-circle fa-1x"></span>
+            </button>
+            <table
+              class="table table-condensed table-bordered table-striped volumes"
+            >
+              <thead>
+                <tr>
+                  <th style="width: 70%">ID</th>
+                  <th>W</th>
+                  <th>L</th>
+                  <th>D</th>
+                </tr>
+              </thead>
+            </table>
           </div>
           <div
             class="tab-pane fade"
-            id="ex1-tabs-2"
+            id="communities"
             role="tabpanel"
-            aria-labelledby="ex1-tab-2"
+            aria-labelledby="CommunitiesTab"
           >
             Communities Tab content
           </div>
           <div
             class="tab-pane fade"
-            id="ex1-tabs-3"
+            id="games"
             role="tabpanel"
-            aria-labelledby="ex1-tab-3"
+            aria-labelledby="gamesTab"
           >
-            Games tab content
+            Games Tab content
           </div>
         </div>
       </div>
