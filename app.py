@@ -15,7 +15,6 @@ def home():
 def about():
     return render_template("about.html")
 
-
 @app.route('/signup')
 def signup():
     return render_template("signup.html")
@@ -39,14 +38,13 @@ def createAccount():
 def forgotPassword():
     return render_template("forgotPassword.html")
 
-@socketio.on('connect')
-def test_connect():
-    emit('my response', {'data': 'Connected'})
+#@socketio.on('connect')
+#def test_connect():
+    #emit('my response', {'data': 'Connected'})
 
 @socketio.on('update board')
 def broadcastFen(message):
     emit('broadcast fen', {'fen': message['fen']}, broadcast=True)
-    #print(message['fen'])
 
 
 

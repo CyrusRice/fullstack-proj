@@ -10,8 +10,10 @@ var config = {
 var board = Chessboard('myBoard', config)
 const chess = new Chess();
 var gameOver = false;
-
+var defaultFen = chess.fen();
 var socket = io();
+var savedGames = new Map();
+var currGameId = '';
 
 // sockets
 /*socket.on('my response', function(msg) {
@@ -24,16 +26,32 @@ socket.on('broadcast fen', data => {
   board.position(data['fen'].split(' ')[0]);
 });
 
-socket.emit('my event', {
-  fen: chess.fen()
-});
-
 // Start new game & reset board when 'New Game' button pressed
 $('#startPositionBtn').on('click', function newGame() {
   gameOver = false;
   chess.reset();
   board.start(false);
   updateBoard();
+})
+
+// Add new game to list using game id entered
+$('#addGame').on('click', function addGame() {
+  let gameId = document.getElementById('gameId').value;
+  let newGame = document.createElement("option");
+  newGame.value = gameId;
+  newGame.textContent = gameId;
+  document.getElementById('games').appendChild(newGame);
+  savedGames.set(gameId, defaultFen);
+})
+
+// Add new game to list using game id entered
+$('#loadGame').on('click', function loadGame() {
+  if(currGameId != '') 
+    savedGames.set(currGameId, chess.fen());
+  let gameId = document.getElementById('games').value;
+  chess.load(savedGames.get(gameId));
+  board.position(savedGames.get(gameId).split(' ')[0])
+  currGameId = gameId;
 })
 
 // When player makes move, validate it before accepting
