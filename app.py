@@ -4,26 +4,29 @@ import bcrypt
 import chess
 from models import *
 
+async_mode = None
+
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app,log_output=True,logger=True)
-
+socketio = SocketIO(app,log_output=True,logger=True,async_mode=async_mode)
+clients = dict()
 @app.route('/')
 def home():
     # app.route('/')
-    return render_template("home.html")
+    return render_template("home.html", sync_mode=socketio.async_mode)
 
 @app.route('/about')
 def about():
-    return render_template("about.html")
+    return render_template("about.html",sync_mode=socketio.async_mode)
 
 @app.route('/signup')
 def signup():
-    return render_template("signup.html")
+    return render_template("signup.html",sync_mode=socketio.async_mode)
 
 @app.route('/account/<userid>')
 def account(userid):
-    return render_template("account.html",userid=userid)
+    return render_template("account.html",userid=userid,sync_mode=socketio.async_mode)
 
 @app.route('/signin', methods = ['POST'])
 def signin():
@@ -34,8 +37,9 @@ def signin():
         if useridCount > 0:
             user = db['users'].find({'userid': userid})[0]
             if bcrypt.checkpw(password,user['password']):
+                print(request.args)
                 return redirect(url_for('account',userid=userid))
-        return render_template("home.html")
+        return render_template("home.html",sync_mode=socketio.async_mode)
 
 
 @app.route('/createAccount', methods = ['POST'])
@@ -54,9 +58,10 @@ def createAccount():
         pass_hash = bcrypt.hashpw(password,salt)
         newuser['password'] = pass_hash
 
-        newuser['friends'] = []
-        newuser['communities'] = []
-        newuser['games'] = []
+        newuser['friends'] = {}
+        newuser['communities'] = {}
+        newuser['games'] = {}
+        newuser['stats'] = {}
 
         useridCount = db['users'].count_documents({'userid': userid})
         emailCount = db['users'].count_documents({'email': request.form['email']})
@@ -75,12 +80,36 @@ def createAccount():
 
 @app.route('/forgotPassword')
 def forgotPassword():
-    return render_template("forgotPassword.html")
+    return render_template("forgotPassword.html", sync_mode=socketio.async_mode)
 
-#@socketio.on('connect')
-#def test_connect():
-    #emit('my response', {'data': 'Connected'})
+@socketio.on('connected')
+def connected(message):
+    clients[request.sid] = message['userid']
+    try:
+        userSockets = clients[message['userid']]
+    except:
+        userSockets = list()
+    
+    userSockets.append(request.sid)
+    clients[message['userid']] = userSockets
+    print(clients)
 
+@socketio.on('disconnect')
+def disconnect():
+    if request.sid in clients.keys():
+        userOnSocket = clients[request.sid]
+        clients.pop(request.sid)
+    else:
+        userOnSocket = None
+
+    if userOnSocket:
+        userSockets = clients[userOnSocket]
+        for userSocket in userSockets:
+            if userSocket in clients.keys():
+                clients.pop(userSocket)
+        clients.pop(userOnSocket)
+        print(clients)
+       
 @socketio.on('update board')
 def broadcastFen(message):
     emit('broadcast fen', {'fen': message['fen']}, broadcast=True)
