@@ -9,56 +9,46 @@ dbModels = dict()
 
 dbModels['users'] = dict()
 dbModels['users']['schema'] = {
-    'firstname' : {
+    'firstname': {
         'type': 'string',
         'minlength': 1,
-        'required' : True,
+        'required': True,
     },
-    'lastname' : {
+    'lastname': {
         'type': 'string',
         'minlength': 1,
-        'required' : True,
+        'required': True,
     },
     'email': {
         'type': 'string',
         "required": True,
     },
-    'userid' : {
+    'userid': {
         'type': 'string',
         'minlength': 1,
-        'required' : True,
-    },   
-    'password' : {
-        'type': 'string',
-        'minlength': 1,
-        'required' : True,
-    }, 
-    'friends' : {
-        'type': 'array',
-        'required' : True,
+        'required': True,
     },
-    'communities' : {
-        'type': 'array',
-        'required' : True,
+    'password': {
+        'type': 'binData',
+        'minlength': 1,
+        'required': True,
     },
-    'games' : {
-        'type': 'array',
-        'required' : True,
-    },                         
-}
-
-dbModels['online'] = dict()
-dbModels['online']['schema'] = {
-    'userid' : {
-        'type': 'string',
-        'minlength': 1,
-        'required' : True,
-    },   
-    'socketid' : {
-        'type': 'string',
-        'minlength': 1,
-        'required' : True,
-    },                
+    'friends': {
+        'type': 'object',
+        'required': True,
+    },
+    'communities': {
+        'type': 'object',
+        'required': True,
+    },
+    'games': {
+        'type': 'object',
+        'required': True,
+    },
+    'stats': {
+        'type': 'object',
+        'required': True,
+    },
 }
 
 dbModels['games'] = dict()
@@ -99,81 +89,86 @@ dbModels['games']['schema'] = {
 
 dbModels['communities'] = dict()
 dbModels['communities']['schema'] = {
-    'communityid' : {
+    'type': {
+        'type': 'string',
+        'required': True,
+        'enum': ['1:1', 'group']
+    },
+    'communityid': {
         'type': 'string',
         'minlength': 1,
-        'required' : True,
-    },   
-    'owner' : {
+        'required': True,
+    },
+    'owner': {
         'type': 'string',
         'minlength': 1,
-        'required' : True,
-    },      
-    'members' : {
+        'required': True,
+    },
+    'members': {
         'type': 'array',
-        'required' : True,
-    },     
-    'tournaments' : {
+        'required': True,
+    },
+    'tournaments': {
         'type': 'array',
-        'required' : False,        
-    } ,       
-    'messages' : {
+        'required': False,
+    },
+    'messages': {
         'type': 'array',
-        'required' : False,
-    },     
+        'required': False,
+    },
 }
 
 dbModels['tournaments'] = dict()
 dbModels['tournaments']['schema'] = {
-    'type' : {
+    'type': {
         'type': 'string',
         'minlength': 1,
-        'required' : True,
-    },   
-    'schedule' : {
+        'required': True,
+    },
+    'schedule': {
         'type': 'object',
-        'required' : True,
-    },      
-    'players' : {
+        'required': True,
+    },
+    'players': {
         'type': 'object',
-        'required' : True,
-    }, 
-    'results' : {
+        'required': True,
+    },
+    'results': {
         'type': 'object',
-        'required' : False,
-    }, 
-    'status' : {
+        'required': False,
+    },
+    'status': {
         'type': 'string',
         'minlength': 1,
-        'required' : True,        
-    },               
+        'required': True,
+    },
 }
 dbModels['messages'] = dict()
 dbModels['messages']['schema'] = {
-    'type' : {
+    'type': {
         'type': 'string',
         'minlength': 1,
-        'required' : True,
-    },   
-    'message' : {
-        'type': 'string',
-        'minlength': 1,
-        'required' : True,
-    },     
-    'sender' : {
-        'type': 'string',
-        'minlength': 1,
-        'required' : True,
-    },    
-    'reciever' : {
-        'type': 'string',
-        'minlength': 1,
-        'required' : True,
+        'required': True,
     },
-    'timestamp' : {
+    'message': {
+        'type': 'string',
+        'minlength': 1,
+        'required': True,
+    },
+    'sender': {
+        'type': 'string',
+        'minlength': 1,
+        'required': True,
+    },
+    'reciever': {
+        'type': 'string',
+        'minlength': 1,
+        'required': True,
+    },
+    'timestamp': {
         'type': 'timestamp',
-        'required' : True,
-    },            
+        'required': True,
+    },
 }
 
 for dbModelKey in dbModels:
@@ -186,6 +181,9 @@ for dbModelKey in dbModels:
         properties = {'bsonType': field['type']}
         minimum = field.get('minlength')
 
+        if field.get('enum'):
+            properties['enum'] = field.get('enum')
+
         if type(minimum) == int:
             properties['minimum'] = minimum
 
@@ -196,9 +194,9 @@ for dbModelKey in dbModels:
 
         if len(required) > 0:
             validator['$jsonSchema']['required'] = required
-        
+
         query = [('collMod', dbModelKey),
-         ('validator', validator)]
+                 ('validator', validator)]
 
         try:
             db.create_collection(dbModelKey)
@@ -206,5 +204,3 @@ for dbModelKey in dbModels:
             pass
 
         command_result = db.command(OrderedDict(query))
-
-

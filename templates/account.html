@@ -1,9 +1,9 @@
 {%extends "layout.html"%} {% block content %}
-<script defer src="../static/chess_frontend.js"></script>
 <script
   src="https://kit.fontawesome.com/7d687e7439.js"
   crossorigin="anonymous"
 ></script>
+<script defer src="../static/chess_frontend.js"></script>
 <div class="home">
   <div class="container-fluid">
     <div class="row">
@@ -41,7 +41,7 @@
             <span class="fas fa-sign-out-alt fa-1x"></span>
           </button>
         </div>
-        <h2 class="mt-1">ACCOUNT</h2>
+        <h2 class="mt-1">{{userid}}</h2>
         <hr class="mt-1 mb-3" />
         <!-- Tabs nav -->
         <ul class="nav nav-tabs mb-3" id="userinfo" role="tablist">
