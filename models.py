@@ -63,28 +63,38 @@ dbModels['online']['schema'] = {
 
 dbModels['games'] = dict()
 dbModels['games']['schema'] = {
-    'type' : {
+    'gameid' : {
         'type': 'string',
         'minlength': 1,
         'required' : True,
-    },   
-    'starttime' : {
-        'type': 'timestamp',
-        'required' : True,
-    },      
-    'players' : {
-        'type': 'object',
-        'required' : True,
-    },     
-    'status' : {
+    },
+    'fen' : {
         'type': 'string',
         'minlength': 1,
-        'required' : True,        
-    } ,        
-    'state' : {
-        'type': 'object',
-        'required' : False,
-    }, 
+        'required' : True,
+    },
+    #'type' : {
+    #    'type': 'string',
+    #    'minlength': 1,
+    #    'required' : True,
+    #},   
+    #'starttime' : {
+    #    'type': 'timestamp',
+    #    'required' : True,
+    #},      
+    #'players' : {
+    #    'type': 'object',
+    #    'required' : True,
+    #},     
+    #'status' : {
+    #    'type': 'string',
+    #    'minlength': 1,
+    #    'required' : True,        
+    #} ,        
+    #'state' : {
+    #    'type': 'object',
+    #    'required' : False,
+    #}, 
 }
 
 dbModels['communities'] = dict()
