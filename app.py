@@ -60,7 +60,7 @@ def addGame():
           #newgame['player_2'] = 'n/a'
           db['games'].insert_one(newgame)
     #return render_template("home.html", sync_mode=socketio.async_mode)
-    return redirect(url_for('home'))
+    return redirect(url_for('account'))
 
 #@app.route('/loadGame', methods = ['POST'])
 #def loadGame():
@@ -152,13 +152,24 @@ def saveGame(message):
     query = {"gameid" : message['currgameid']}
     newvalues = { "$set": { "fen": message['fen'] } }
     if message['currgameid'] != '':
-      print('not saving')
       db['games'].update_one(query, newvalues)
-    print(message['newgameid'])
     query = {"gameid" : message['newgameid']}
     game = dumps(list(db['games'].find(query)))
-    print(game)
     emit('load game', game, broadcast=True)
+
+# Add a new game
+@socketio.on('add game')
+def addGame(message):
+    gameIdCount = db['games'].count_documents({'gameid': message['gameid']})
+    if gameIdCount > 0:
+        flash('gameid already exists, pick a different one')
+    else:    
+        newgame = dict()
+        newgame['gameid'] = message['gameid']
+        newgame['fen'] = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+        #newgame['player_1'] = 'n/a'
+        #newgame['player_2'] = 'n/a'
+        db['games'].insert_one(newgame)
 
 # Fill in the games list in the home.html page w/ all existing games
 @socketio.on('get games')

@@ -50,7 +50,7 @@ socket.on('send games', data => {
     let newGame = document.createElement("option");
     newGame.value = gameslist[i].gameid;
     newGame.textContent = gameslist[i].gameid;
-    document.getElementById('games').appendChild(newGame);
+    document.getElementById('gameslist').appendChild(newGame);
   }
 });
 
@@ -69,27 +69,30 @@ $(document).ready(function() {
   socket.emit('get games', {});
 });
 
-/* Add new game to list using game id entered
+// Add new game to list using game id entered
 $('#addGame').on('click', function addGame() {
-  let addGameForm = document.forms["addGameForm"];
+  //let addGameForm = document.forms["addGameForm"];
   let gameId = document.getElementById('gameId').value;
   let newGame = document.createElement("option");
   newGame.value = gameId;
   newGame.textContent = gameId;
-  document.getElementById('games').appendChild(newGame);
+  document.getElementById('gameslist').appendChild(newGame);
+  socket.emit('add game', {
+    gameid: gameId,
+  });
   //savedGames.set(gameId, defaultFen);
-  addGameForm.submit();
-})*/
+  //addGameForm.submit();
+})
 
 // Save current game before new one is loaded
 $('#loadGame').on('click', function loadSaveGame() {
-  console.log(chess.fen());
-  console.log(currGameId);
-  console.log(document.getElementById('games').value);
+  //console.log(chess.fen());
+  //console.log(currGameId);
+  //console.log(document.getElementById('gameslist').value);
   socket.emit('load save game', {
     fen: chess.fen(), 
     currgameid: currGameId,
-    newgameid: document.getElementById('games').value,
+    newgameid: document.getElementById('gameslist').value,
   });
 })
 
