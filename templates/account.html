@@ -4,6 +4,7 @@
   crossorigin="anonymous"
 ></script>
 <script defer src="../static/chess_frontend.js"></script>
+<script defer src="../static/js/account.js"></script>
 <div class="home">
   <div class="container-fluid">
     <div class="row">
@@ -37,11 +38,16 @@
           >
             <span class="fas fa-user-cog fa-1x"></span>
           </button>
-          <button id="logout-button" type="button" class="btn btn-primary mt-1">
+          <button
+            id="logout-button"
+            type="button"
+            class="btn btn-primary mt-1"
+            onclick="location.href = `{{ url_for('logout') }}`;"
+          >
             <span class="fas fa-sign-out-alt fa-1x"></span>
           </button>
         </div>
-        <h2 class="mt-1">{{userid}}</h2>
+        <h2 class="mt-1" id="accountOwner">{{userid}}</h2>
         <hr class="mt-1 mb-3" />
         <!-- Tabs nav -->
         <ul class="nav nav-tabs mb-3" id="userinfo" role="tablist">
