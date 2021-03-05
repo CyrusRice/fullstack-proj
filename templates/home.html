@@ -10,19 +10,25 @@
         <button class="ml-3 mt-3 mb-3" id="startPositionBtn">
           Start Position
         </button>
-        <p>Join a Game:</p>
-        <select name="games" id="games">
-        </select><hr>
-        <input type="submit"
-        class="btn btn-primary mt-2 mb-5"
-        value="Load Game"
-        id="loadGame" />
-        <p>Start a Game:</p>
-        <input type="text" id="gameId" placeholder="Enter game id here"/><hr>
-        <input type="submit"
-        class="btn btn-primary mt-2 mb-5"
-        value="Add Game"
-        id="addGame" />
+        <form action="/loadGame" method="post" id="loadGameForm">
+          <p>Join a Game:</p>
+          <select name="gameslist" id="gameslist">
+          </select><hr>
+          <input type="button"
+          class="btn btn-primary mt-2 mb-5"
+          value="Load Game"
+          id="loadGame" 
+          />
+        </form>
+        <form action="/addGame" method="post" id="addGameForm">
+          <p>Start a Game:</p>
+          <input type="text" id="gameId" name='gameId' placeholder="Enter game id here"/><hr>
+          <input type="submit"
+          class="btn btn-primary mt-2 mb-5"
+          value="Add Game"
+          id="addGame" 
+          />
+        </form>
       </div>
       <div class="col-3 border">
         <form action="/signin" method="post" id="loginForm">

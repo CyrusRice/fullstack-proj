@@ -127,6 +127,25 @@
             aria-labelledby="gamesTab"
           >
             Games Tab content
+            <form action="/loadGame" method="post" id="loadGameForm">
+              <p>Join a Game:</p>
+              <select name="gameslist" id="gameslist">
+              </select><hr>
+              <input type="button"
+              class="btn btn-primary mt-2 mb-5"
+              value="Load Game"
+              id="loadGame" 
+              />
+            </form>
+            <form action="/addGame" method="post" id="addGameForm">
+              <p>Start a Game:</p>
+              <input type="text" id="gameId" name='gameId' placeholder="Enter game id here"/><hr>
+              <input type="button"
+              class="btn btn-primary mt-2 mb-5"
+              value="Add Game"
+              id="addGame" 
+              />
+            </form>
           </div>
         </div>
       </div>
