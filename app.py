@@ -3,29 +3,19 @@ from flask_socketio import SocketIO, emit
 import bcrypt
 import chess
 from models import *
-<<<<<<< HEAD
 import copy
-=======
 from bson.json_util import dumps
->>>>>>> da6546db9d2897c8d608f341a34d0b35e5906695
 
 async_mode = None
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
-<<<<<<< HEAD
-socketio = SocketIO(app, log_output=True, logger=True, async_mode=async_mode)
-clients = dict()
-
-
-=======
 socketio = SocketIO(app,log_output=True,logger=True,async_mode=async_mode)
 #socketio.init_app(app)
 clients = dict()
 currGameId = ''
 currFen = ''
->>>>>>> da6546db9d2897c8d608f341a34d0b35e5906695
 @app.route('/')
 def home():
     # app.route('/')
@@ -156,7 +146,6 @@ def disconnect():
         userOnSocket = None
 
     if userOnSocket:
-<<<<<<< HEAD
         userSockets = copy.deepcopy(clients[userOnSocket])
         if request.sid in userSockets:
             userSockets.remove(request.sid)
@@ -166,16 +155,6 @@ def disconnect():
             clients[userOnSocket] = userSockets
 
 
-=======
-        userSockets = clients[userOnSocket]
-        for userSocket in userSockets:
-            if userSocket in clients.keys():
-                clients.pop(userSocket)
-        clients.pop(userOnSocket)
-        print(clients)
-
-# Broadcast one clients board changes to all clients      
->>>>>>> da6546db9d2897c8d608f341a34d0b35e5906695
 @socketio.on('update board')
 def broadcastFen(message):
     currFen = message['fen']
