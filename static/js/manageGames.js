@@ -12,6 +12,7 @@ let config = {
   let chess = null;
   let gameOver = null;
   let defaultFen = null;
+  let userId = null;
   //let socket = require('/static/js/socket.js').socket;
 
   // Fill out home.html games drop down form as soon as page is loaded by getting games from mongodb
@@ -20,12 +21,15 @@ let config = {
     chess = new Chess();
     gameOver = false;
     defaultFen = chess.fen();    
-    clientSocketEmit('get games', {});
+    userId = document.getElementById('accountOwner').textContent;
+    clientSocketEmit('get games', {userId: userId});
   });
   
   // Add new game to list using game id entered
   $('#addGame').on('click', function addGame() {
     //let addGameForm = document.forms["addGameForm"];
+    let p1 = document.getElementById('accountOwner').textContent;
+    let p2 = document.getElementById('invitedPlayer').value;
     let gameId = document.getElementById('gameId').value;
     let newGame = document.createElement("option");
     newGame.value = gameId;
@@ -33,6 +37,8 @@ let config = {
     document.getElementById('gameslist').appendChild(newGame);
     clientSocketEmit('add game', {
       gameid: gameId,
+      p1: p1,
+      p2: p2,
     });
     //savedGames.set(gameId, defaultFen);
     //addGameForm.submit();
@@ -66,6 +72,7 @@ let config = {
   function updateBoard() {
     clientSocketEmit("update board", {
       fen: chess.fen(),
+      currgameid: currGameId,
     });
   }
   //===========================================Chess Related Code(END)=========================
