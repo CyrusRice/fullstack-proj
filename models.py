@@ -37,8 +37,16 @@ dbModels['users']['schema'] = {
         'type': 'object',
         'required': True,
     },
+    'friendids': {
+        'type': 'array',
+        'required': True,
+    },
     'communities': {
         'type': 'object',
+        'required': True,
+    },
+    'communityids': {
+        'type': 'array',
         'required': True,
     },
     'games': {
@@ -106,6 +114,14 @@ dbModels['communities']['schema'] = {
     },
     'members': {
         'type': 'array',
+        'required': True,
+    },
+    'results': {
+        'type': 'object',
+        'required': True,
+    },
+    'membership': {
+        'type': 'object',
         'required': True,
     },
     'tournaments': {
