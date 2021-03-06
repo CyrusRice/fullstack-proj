@@ -7,10 +7,11 @@ function formToDict(formEl) {
   return formDict;
 }
 
-function alertUserWithModal(message,color="red",yesButton = null,noButton = null,getUserTextInput=false,yesResponseId=null,noResponseId=null) {
+function alertUserWithModal(message,color="black",yesButton = null,noButton = null,getUserTextInput=false,yesResponseId=null,noResponseId=null) {
   document.getElementById("alertUserMessage").style.color = color
   document.getElementById("alertUserMessage").innerHTML = message;
   let yesButtonEl = document.getElementById("alertUserYesButton")
+  let noButtonEl = document.getElementById("alertUserNoButton")
   if (getUserTextInput) {
     document.getElementById("alertUserInputData").type = "text"
   } else {
@@ -20,28 +21,25 @@ function alertUserWithModal(message,color="red",yesButton = null,noButton = null
   if (yesButton !== null) {
     yesButtonEl.innerHTML = yesButton
     yesButtonEl.style.display = "block"
-    yesResponseEl = null
-    if(yesResponseId !==null) {
-      yesResponseEl = document.getElementById("yesResponseId")
-    }
-    //yesButtonEl.onclick == null
-    print(yesResponseEl)
-    //yesButtonEl.addEventListener("click", function () {
-    //    recordAlertUserResponse(true,yesResponseEl,null)
-    //});
-    
+    yesButtonEl.value = yesResponseId    
   } else {
-    document.getElementById("alertUserYesButton").innerHTML = ""
-    document.getElementById("alertUserYesButton").style.display = "none"    
+    yesButtonEl.innerHTML = ""
+    yesButtonEl.style.display = "none"   
+    yesButtonEl.value = null
   }
   if (noButton !== null) {
-    document.getElementById("alertUserNoButton").innerHTML = noButton
-    document.getElementById("alertUserNoButton").style.display = "block"
+    noButtonEl.innerHTML = noButton
+    noButtonEl.style.display = "block"
+    noButtonEl.value = yesResponseId 
   } else {
-    document.getElementById("alertUserNoButton").innerHTML = ""
-    document.getElementById("alertUserNoButton").style.display = "none"    
+    noButtonEl.innerHTML = ""
+    noButtonEl.style.display = "none"  
+    noButtonEl.value = null  
   }
-  document.getElementById("alertUserButton").click();
+  if (document.getElementById("alertUserButton").value !== "alertUserIsOpen") {
+    document.getElementById("alertUserButton").value = "alertUserIsOpen"
+    document.getElementById("alertUserButton").click();
+  }
 }
 
 function getRowIndexByTagName(table,tagName) {
@@ -67,14 +65,16 @@ function recordAlertUserResponse(userResponse=null,yesResponseEl=null,noResponse
     document.getElementById("alertUserCloseButton").click();
   } else if (userResponse) {
     document.getElementById("alertUserResponse").value = "yes"
-    if (yesResponseEl != null) {
-      yesResponseEl.click()
-    } 
+    yesResponseId = document.getElementById("alertUserYesButton").value
+    if (yesResponseId != null) {
+      document.getElementById(yesResponseId).click()
+    }
   } else {
     document.getElementById("alertUserResponse").value = "no"
-    if (noResponseEl != null) {
-      noResponseEl.click()
-    }    
+    noResponseId = document.getElementById("alertUserNoButton").value
+    if (noResponseId != null) {
+      document.getElementById(noResponseId).click()
+    } 
   }
 
   
@@ -84,5 +84,6 @@ function closeUserAlertModal(){
   document.getElementById("alertUserInputData").type = "hidden"    
   document.getElementById("alertUserInputData").value = ""
   document.getElementById("alertUserResponse").value = ""  
+  document.getElementById("alertUserButton").value = "alertUserIsClose"
   document.getElementById("alertUserCloseButton").click();  
 }

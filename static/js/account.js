@@ -7,28 +7,26 @@ window.onload = function () {
   about.innerHTML = "";
 };
 function addFriendUsingModal() { 
-  //alertUserWithModal("Please enter a Friend's ID","black","Add",null,true)
-  document.getElementById("addFriendYesButton").click()
+  alertUserWithModal("Please enter a Friend's ID","black","Add",null,true,"addFriendYesButton")
+  //document.getElementById("addFriendYesButton").click()
 }
 function addFriend() {
   let table = document.getElementById("friends-table");
-  /*
+  
   let userResponse = formToDict(document.forms["alertUserInputForm"]);
-  console.log(userResponse)
   let friend = null
-  if (userResponse["alertUserInputData"] !== "") {
+  if (userResponse["alertUserInputData"] !== "" && userResponse["alertUserResponse"] === "yes") {
     friend = userResponse["alertUserInputData"]
   }
-  */
-  friend = prompt("Please enter a Friend's ID", "");
-  console.log(friend)
+  
+  //friend = prompt("Please enter a Friend's ID", "");
   let sender = accountOwner.innerHTML;
   if (friend === sender) {
-    //clientSocketEmit(closeAlertUser,{"message":"Can't add yourself to your own friends list"})
+    //clientSocketEmit("closeAlertUser",{"message":"Can't add yourself to your own friends list"})
     alertUserWithModal("Can't add yourself to your own friends list");
   } else if (getRowIndexByTagName(table, friend) > -1) {
     alertUserWithModal("Already found  the user in FriendsList userid = " + friend);
-    clientSocketEmit(closeAlertUser,{"message":"Already found  the user in FriendsList userid = " + friend})
+    //clientSocketEmit("closeAlertUser",{"message":"Already found  the user in FriendsList userid = " + friend})
   } else if (friend !== null) {
     document.getElementById("addFriendSender").value = sender;
     document.getElementById("addFriendReceiver").value = friend;

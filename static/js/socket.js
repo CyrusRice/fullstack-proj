@@ -53,22 +53,14 @@ socket.on("connectionRecorded", () => {
 
 socket.on("addFriendToTable", (data) => {
   addFriendToTable(data);
-  //socket.emit("closeAlertUser",{"message":null})
+  closeUserAlertModal()
 });
 socket.on("populateFriendsList", (data) => {
   for (const [friendId, friendData] of Object.entries(data)) {
     addFriendToTable(friendData);
   };
-  //socket.emit("closeAlertUser")
   //socket.emit('get games', {})
 });
-
-socket.on("closeAlertUser", (data) => {
-  document.getElementById("alertUserCloseButton").click()
-  if (data["message"] !== null) {
-    socket.emit("alertUser",data)
-  }
-})
 
 function getSocketID() {
   return socket.id;
