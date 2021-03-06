@@ -40,21 +40,27 @@
     <script defer src="/static/js/common.js"></script>
   </head>
   <body>
-    <!-- Button trigger modal -->
+    <!-- Button trigger Alert User modal -->
     <button type="button" id = "alertUserButton" class="btn btn-primary" data-toggle="modal" data-target="#alertUser" hidden></button>
-    <!-- Modal to alert User-->
-    <div class="modal fade" id="alertUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Modal to Alert User-->
+    <div class="modal fade" id="alertUser" tabindex="-1" role="dialog" aria-labelledby="alertUserLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <h5 class="modal-title" id="alertUserTitle"></h5>
           </div>
-          <div class="modal-body" id="alertUserMessage" style = "color:red"></div>
+          <div class="modal-body" id="alertUserBody">
+            <div id="alertUserMessage"></div>
+            <form id="alertUserInputForm">
+              <input type="hidden" class="form-control" placeholder="" name="alertUserInputData" id="alertUserInputData" value="">
+              <input type="hidden" class="form-control" placeholder="" name="alertUserResponse" id="alertUserResponse" value="">             
+            </form>             
+          </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="alertUserYesButton" style = "width:70px;background-color: green" onclick="recordAlertUserResponse(true)"></button>
+            <button type="button" class="btn btn-primary" id="alertUserNoButton" style = "width:70px;background-color: red" onclick="recordAlertUserResponse(false)"></button>
+            <button type="button" class="btn btn-primary" id="alertUserCancelButton" style = "width:70px;background-color: gray" onclick="closeUserAlertModal()">Close</button>
+            <button type="button" class="btn btn-secondary" id ="alertUserCloseButton" data-dismiss="modal" style = "width:70px" hidden></button>
           </div>
         </div>
       </div>

@@ -6,24 +6,34 @@ window.onload = function () {
   home.innerHTML = "";
   about.innerHTML = "";
 };
-
+function addFriendUsingModal() { 
+  //alertUserWithModal("Please enter a Friend's ID","black","Add",null,true)
+  document.getElementById("addFriendYesButton").click()
+}
 function addFriend() {
   let table = document.getElementById("friends-table");
+  /*
+  let userResponse = formToDict(document.forms["alertUserInputForm"]);
+  console.log(userResponse)
+  let friend = null
+  if (userResponse["alertUserInputData"] !== "") {
+    friend = userResponse["alertUserInputData"]
+  }
+  */
   friend = prompt("Please enter a Friend's ID", "");
+  console.log(friend)
   let sender = accountOwner.innerHTML;
   if (friend === sender) {
+    //clientSocketEmit(closeAlertUser,{"message":"Can't add yourself to your own friends list"})
     alertUserWithModal("Can't add yourself to your own friends list");
   } else if (getRowIndexByTagName(table, friend) > -1) {
-    console.log("Already found  the user in FriendsList userid = " + friend)
-    alertUserWithModal(
-      "Already found  the user in FriendsList userid = " + friend
-    );
+    alertUserWithModal("Already found  the user in FriendsList userid = " + friend);
+    clientSocketEmit(closeAlertUser,{"message":"Already found  the user in FriendsList userid = " + friend})
   } else if (friend !== null) {
     document.getElementById("addFriendSender").value = sender;
     document.getElementById("addFriendReceiver").value = friend;
     data = formToDict(document.forms["addFriend"]);
     clientSocketEmit("addFriend", data);
-    //document.forms["addFriend"].submit();
   } else {
     document.getElementById("addFriendSender").value = "";
     document.getElementById("addFriendReceiver").value = "";
@@ -78,5 +88,22 @@ function addFriendToTable(data) {
 
     let rowDraws = row.insertCell(7);
     rowDraws.innerHTML = data["draws"];
+
+    row.addEventListener("click", function () {
+      friendRowOnClick(friendId);
+    });
+  }
+}
+
+function friendRowOnClick(friendId) {
+  let table = document.getElementById("friends-table");
+  let rowIndex = getRowIndexByTagName(table, friendId);
+  if (rowIndex > -1) {
+    let ReqStatus = table.rows[rowIndex].cells[2].innerHTML;
+    if (ReqStatus == "inviteSent") {
+      alertUserWithModal("Friend Request is already sent to <u style = \"color:red\">" + friendId.bold() + "</u> waiting for response","black","Accept","Reject");
+    }
+      
+    
   }
 }

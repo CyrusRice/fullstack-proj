@@ -14,6 +14,5 @@ function validateSignupForm() {
     confirmPassword.value = "";
   } else {
     signupForm.submit();
-
   }
 }

@@ -14,6 +14,7 @@
   <form id="getFriends">
     <input id="getFriendsSender" name="sender" type="hidden" value="" />
   </form>
+  <button type="button" id = "addFriendYesButton" class="btn btn-primary" onclick=addFriend() hidden></button>
   <div class="container-fluid">
     <div class="row">
       <div class="col-9 border">
@@ -97,7 +98,7 @@
               id="addFriend-button"
               type="button"
               class="btn btn-primary float-right mr-2 mt-1"
-              onclick="addFriend()"
+              onclick="addFriendUsingModal()"
             >
               <span class="fas fa-user-plus fa-1x"></span>
             </button>
