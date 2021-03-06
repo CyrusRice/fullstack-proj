@@ -63,6 +63,16 @@ dbModels['games']['schema'] = {
         'minlength': 1,
         'required' : True,
     },
+    'player_1' : {
+        'type': 'string',
+        'minlength': 1,
+        'required' : True,
+    },
+    'player_2' : {
+        'type': 'string',
+        'minlength': 1,
+        'required' : True,
+    },
     #'type' : {
     #    'type': 'string',
     #    'minlength': 1,

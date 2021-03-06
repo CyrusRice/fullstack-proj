@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, request, redirect, flash
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room, leave_room
 import bcrypt
 import chess
 from models import *
@@ -158,7 +158,7 @@ def disconnect():
 @socketio.on('update board')
 def broadcastFen(message):
     currFen = message['fen']
-    emit('broadcast fen', {'fen': currFen}, broadcast=True)
+    emit('broadcast fen', {'fen': currFen}, room=message['currgameid'])
 
 # Load new game and save old game
 @socketio.on('load save game')
@@ -166,10 +166,12 @@ def saveGame(message):
     query = {"gameid" : message['currgameid']}
     newvalues = { "$set": { "fen": message['fen'] } }
     if message['currgameid'] != '':
+      leave_room(message['currgameid'])
       db['games'].update_one(query, newvalues)
     query = {"gameid" : message['newgameid']}
     game = dumps(list(db['games'].find(query)))
-    emit('load game', game, broadcast=True)
+    join_room(message['newgameid'])
+    emit('load game', game, room=message['newgameid'])
 
 # Add a new game
 @socketio.on('add game')
@@ -181,15 +183,16 @@ def addGame(message):
         newgame = dict()
         newgame['gameid'] = message['gameid']
         newgame['fen'] = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
-        #newgame['player_1'] = 'n/a'
-        #newgame['player_2'] = 'n/a'
+        newgame['player_1'] = message['p1']
+        newgame['player_2'] = message['p2']
         db['games'].insert_one(newgame)
 
-# Fill in the games list in the home.html page w/ all existing games
+# Fill in the games list for all games user is in
 @socketio.on('get games')
 def broadcastGames(message):
-    gameslist = dumps(list(db['games'].find()))
-    emit('send games', gameslist, broadcast=True)
+    query = {"$or" : [{"player_1" : message['userId']}, {"player_2" : message['userId']}]}
+    gameslist = dumps(list(db['games'].find(query)))
+    emit('send games', gameslist)
     
 
 

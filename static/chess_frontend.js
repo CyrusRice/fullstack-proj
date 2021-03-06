@@ -38,6 +38,7 @@ socket.on("broadcast fen", (data) => {
 socket.on('load game', data => {
   let game = JSON.parse(data)
   //console.log(data);
+  console.log(game);
   chess.load(game[0].fen);
   board.position(game[0].fen.split(' ')[0]);
   currGameId = game[0].gameid;
@@ -61,17 +62,21 @@ $('#startPositionBtn').on('click', function newGame() {
   console.log(chess.fen());
   board.start(false);
   updateBoard();
-<<<<<<< HEAD
 })*/
 
 // Fill out home.html games drop down form as soon as page is loaded by getting games from mongodb
 $(document).ready(function() {
-  socket.emit('get games', {});
+  let userId = document.getElementById('accountOwner').textContent;
+  socket.emit('get games', {
+    userId: userId,
+  });
 });
 
 // Add new game to list using game id entered
 $('#addGame').on('click', function addGame() {
   //let addGameForm = document.forms["addGameForm"];
+  let p1 = document.getElementById('accountOwner').textContent;
+  let p2 = document.getElementById('invitedPlayer').value;
   let gameId = document.getElementById('gameId').value;
   let newGame = document.createElement("option");
   newGame.value = gameId;
@@ -79,6 +84,8 @@ $('#addGame').on('click', function addGame() {
   document.getElementById('gameslist').appendChild(newGame);
   socket.emit('add game', {
     gameid: gameId,
+    p1: p1,
+    p2: p2,
   });
   //savedGames.set(gameId, defaultFen);
   //addGameForm.submit();
@@ -112,5 +119,6 @@ function onDrop(source, target, piece, newPos, oldPos, orientation) {
 function updateBoard() {
   socket.emit("update board", {
     fen: chess.fen(),
+    currgameid: currGameId,
   });
 }
