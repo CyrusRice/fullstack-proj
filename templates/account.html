@@ -3,9 +3,17 @@
   src="https://kit.fontawesome.com/7d687e7439.js"
   crossorigin="anonymous"
 ></script>
-<script defer src="../static/chess_frontend.js"></script>
-<script defer src="../static/js/account.js"></script>
-<div class="home">
+<script defer src="/static/js/socket.js"></script>
+<script defer src="/static/js/account.js"></script>
+<script defer src="/static/js/manageGames.js"></script>
+<div class="account">
+  <form id="addFriend">
+    <input id="addFriendSender" name="sender" type="hidden" value="" />
+    <input id="addFriendReceiver" name="receiver" type="hidden" value="" />
+  </form>
+  <form id="getFriends">
+    <input id="getFriendsSender" name="sender" type="hidden" value="" />
+  </form>
   <div class="container-fluid">
     <div class="row">
       <div class="col-9 border">
@@ -86,31 +94,40 @@
             aria-labelledby="friendsTab"
           >
             <button
-              id="settings-button"
+              id="addFriend-button"
               type="button"
               class="btn btn-primary float-right mr-2 mt-1"
+              onclick="addFriend()"
             >
               <span class="fas fa-user-plus fa-1x"></span>
             </button>
             <button
-              id="settings-button"
+              id="removeFriend-button"
               type="button"
               class="btn btn-primary float-right mr-2 mt-1 mb-1"
             >
               <span class="fas fa-minus-circle fa-1x"></span>
             </button>
-            <table
-              class="table table-condensed table-bordered table-striped volumes"
-            >
-              <thead>
-                <tr>
-                  <th style="width: 70%">ID</th>
-                  <th>W</th>
-                  <th>L</th>
-                  <th>D</th>
-                </tr>
-              </thead>
-            </table>
+          </br>
+          <div class="table-wrapper-scroll-y my-custom-scrollbar mt-4">
+              <table
+                class="table table-bordered table-striped mb-0"
+                id="friends-table"
+              >
+                <thead>
+                  <tr>
+                    <th hidden></th>
+                    <th style="width: 70%">Name</th>
+                    <th hidden>requestStatus</th>
+                    <th hidden>onlineStatus</th>
+                    <th hidden>gameStatus</th>
+                    <th>W</th>
+                    <th>L</th>
+                    <th>D</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
           </div>
           <div
             class="tab-pane fade"
@@ -129,12 +146,13 @@
             Games Tab content
             <form action="/loadGame" method="post" id="loadGameForm">
               <p>Join a Game:</p>
-              <select name="gameslist" id="gameslist">
-              </select><hr>
-              <input type="button"
-              class="btn btn-primary mt-2 mb-5"
-              value="Load Game"
-              id="loadGame" 
+              <select name="gameslist" id="gameslist"></select>
+              <hr />
+              <input
+                type="button"
+                class="btn btn-primary mt-2 mb-5"
+                value="Load Game"
+                id="loadGame"
               />
             </form>
             <form action="/addGame" method="post" id="addGameForm">
