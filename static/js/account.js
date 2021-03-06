@@ -22,50 +22,52 @@ function addFriend() {
 }
 
 function getFriends() {
-  document.getElementById("getFriendsSender").value = accountOwner.innerHTML
+  document.getElementById("getFriendsSender").value = accountOwner.innerHTML;
   data = formToDict(document.forms["getFriends"]);
-  clientSocketEmit('getFriends', data);
+  clientSocketEmit("getFriends", data);
 }
 
 function addFriendToTable(data) {
   let table = document.getElementById("friends-table");
   let friendId = data["id"];
-  let row = table.insertRow();
-  row.id = friendId;
+  if (getRowIndexByTagName(table, friendId) === -1) {
+    let row = table.insertRow();
+    row.id = friendId;
 
-  let selectrow = row.insertCell(0);
-  let cb = document.createElement("input");
-  cb.type = "checkbox";
-  cb.id = friendId + "_cb";
-  selectrow.appendChild(cb);
-  selectrow.style.display = "none";
+    let selectrow = row.insertCell(0);
+    let cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.id = friendId + "_cb";
+    selectrow.appendChild(cb);
+    selectrow.style.display = "none";
 
-  let rowUserName = row.insertCell(1);
-  rowUserName.innerHTML = data["name"];
-  rowUserName.style.width = "70%";
+    let rowUserName = row.insertCell(1);
+    rowUserName.innerHTML = data["name"];
+    rowUserName.style.width = "70%";
 
-  let rowReqStatus = row.insertCell(2);
-  rowReqStatus.innerHTML = data["requestStatus"];
-  rowReqStatus.style.display = "none";
+    let rowReqStatus = row.insertCell(2);
+    rowReqStatus.innerHTML = data["requestStatus"];
+    rowReqStatus.style.display = "none";
 
-  let rowOnlineStatus = row.insertCell(3);
-  online_cb = document.createElement("input");
-  online_cb.type = "checkbox";
-  online_cb.id = friendId + "_on";
-  online_cb.checked = data["onlineStatus"];
-  rowOnlineStatus.appendChild(online_cb);
-  rowOnlineStatus.style.display = "none";
+    let rowOnlineStatus = row.insertCell(3);
+    online_cb = document.createElement("input");
+    online_cb.type = "checkbox";
+    online_cb.id = friendId + "_on";
+    online_cb.checked = data["onlineStatus"];
+    rowOnlineStatus.appendChild(online_cb);
+    rowOnlineStatus.style.display = "none";
 
-  let rowGameStatus = row.insertCell(4);
-  rowGameStatus.innerHTML = data["gameStatus"];
-  rowGameStatus.style.display = "none";
+    let rowGameStatus = row.insertCell(4);
+    rowGameStatus.innerHTML = data["gameStatus"];
+    rowGameStatus.style.display = "none";
 
-  let rowWins = row.insertCell(5);
-  rowWins.innerHTML = data["wins"];
+    let rowWins = row.insertCell(5);
+    rowWins.innerHTML = data["wins"];
 
-  let rowLosses = row.insertCell(6);
-  rowLosses.innerHTML = data["losses"];
+    let rowLosses = row.insertCell(6);
+    rowLosses.innerHTML = data["losses"];
 
-  let rowDraws = row.insertCell(7);
-  rowDraws.innerHTML = data["draws"];
+    let rowDraws = row.insertCell(7);
+    rowDraws.innerHTML = data["draws"];
+  }
 }
