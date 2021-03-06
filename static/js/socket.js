@@ -55,7 +55,6 @@ socket.on("addFriendToTable", (data) => {
   addFriendToTable(data);
 });
 socket.on("populateFriendsList", (data) => {
-  console.log(data)
   for (const [friendId, friendData] of Object.entries(data)) {
     addFriendToTable(friendData);
   };

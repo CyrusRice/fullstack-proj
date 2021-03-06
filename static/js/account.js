@@ -8,9 +8,18 @@ window.onload = function () {
 };
 
 function addFriend() {
+  let table = document.getElementById("friends-table");
   friend = prompt("Please enter a Friend's ID", "");
-  if (friend != null) {
-    document.getElementById("addFriendSender").value = accountOwner.innerHTML;
+  let sender = accountOwner.innerHTML;
+  if (friend === sender) {
+    alertUserWithModal("Can't add yourself to your own friends list");
+  } else if (getRowIndexByTagName(table, friend) > -1) {
+    console.log("Already found  the user in FriendsList userid = " + friend)
+    alertUserWithModal(
+      "Already found  the user in FriendsList userid = " + friend
+    );
+  } else if (friend !== null) {
+    document.getElementById("addFriendSender").value = sender;
     document.getElementById("addFriendReceiver").value = friend;
     data = formToDict(document.forms["addFriend"]);
     clientSocketEmit("addFriend", data);
