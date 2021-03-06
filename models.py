@@ -1,6 +1,8 @@
 from pymongo import MongoClient
 from pymongo.errors import CollectionInvalid
 from collections import OrderedDict
+from common import *
+import random
 
 dbclient = MongoClient("mongodb://localhost:27017/")
 db = dbclient["OnBoardGames"]
@@ -220,3 +222,42 @@ for dbModelKey in dbModels:
             pass
 
         command_result = db.command(OrderedDict(query))
+
+if __name__ == '__main__':
+    maxUsers = 100
+    maxFriendPairs = 1000
+    for i in range(maxUsers):
+        userid = "player" + str(i)
+        firstname = userid
+        lastname = "test"
+        email = userid + "@gmail.com"
+        password = "abcdef"
+        createNewUserDoc(userid, firstname, lastname, email, password.encode('utf-8'))
+    
+    possiblePairs = [(x,y) for x in range(maxUsers) for y in range(maxUsers) if x != y]
+
+    selectPairs = random.sample(possiblePairs,maxFriendPairs*2)
+    i = 0
+    friendPairs = list() 
+    for friendPair in selectPairs:
+        sender = "player" + str(friendPair[0])
+        receiver = "player" + str(friendPair[1])
+        senderCount = db['users'].count_documents({'userid': sender})
+        receiverCount = db['users'].count_documents({'userid': receiver})
+
+        communityQuery = {'$and': [{'type': '1:1'}, {
+            'members': sender}, {'members': receiver}]}
+        communityCount = db['communities'].count_documents(communityQuery) 
+        if senderCount > 0 and receiverCount > 0:
+            sendInviteStatus = updateFriendsListDoc(sender, receiver, 'sendInvite')
+            if sendInviteStatus['status'] == 'success':
+                i += 1
+                friendPairs.append(friendPair)
+                if communityCount == 0:
+                    communitytype = '1:1'
+                    communityid = sender + '_' + receiver
+                    owner = sender
+                    members = [sender, receiver]
+                    createNewCommunityDoc(communitytype, communityid, owner, members)
+                if i >= maxFriendPairs:
+                    break

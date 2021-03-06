@@ -171,11 +171,15 @@ def updateFriendsListDoc(sender, receiver, action):
             if receiver not in senderDoc["friendids"] and sender in receiverDoc["friendids"]:
                 result['status'] = "inconsistentDB"
             if receiver in senderDoc["friendids"] and sender in receiverDoc["friendids"]:
-                if senderDoc['requestStatus'] == 'inviteSent' and receiverDoc['requestStatus'] == 'pending':
+                senderFriends = senderDoc['friends']
+                senderData = senderFriends[receiver]
+                receiverFriends = receiverDoc["friends"]
+                receiverData = receiverFriends[sender]
+                if senderData['requestStatus'] == 'inviteSent' and receiverData['requestStatus'] == 'pending':
                     result['status'] = "waitingForReceiverResponse"
-                elif receiverDoc['requestStatus'] == 'inviteSent' and senderDoc['requestStatus'] == 'pending':
+                elif receiverData['requestStatus'] == 'inviteSent' and senderData['requestStatus'] == 'pending':
                     result['status'] = "waitingForSenderResponse"
-                elif senderDoc['requestStatus'] == 'added' and receiverDoc['requestStatus'] == 'added':
+                elif senderData['requestStatus'] == 'added' and receiverData['requestStatus'] == 'added':
                     result['status'] = "alreadyFriends"
                 else:
                     result['status'] = "inconsistentDB"

@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_socketio import SocketIO, emit
 import bcrypt
 import chess
-from models import *
+#from models import *
 from common import *
 import copy
 from bson.json_util import dumps
