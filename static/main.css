@@ -42,6 +42,8 @@ header h1.logo:hover {
    * Center the body content
    */
 div.home,
+div.signup,
+div.account,
 div.about {
   padding: 10px 0 30px 0;
   background-color: #e6e6fa;
@@ -111,4 +113,12 @@ form label {
 
 form input[type="button"] {
   background-color: rgb(102, 0, 128);
+}
+
+.dot {
+  height: 25px;
+  width: 25px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
 }

@@ -22,11 +22,9 @@ function addFriend() {
   //friend = prompt("Please enter a Friend's ID", "");
   let sender = accountOwner.innerHTML;
   if (friend === sender) {
-    //clientSocketEmit("closeAlertUser",{"message":"Can't add yourself to your own friends list"})
     alertUserWithModal("Can't add yourself to your own friends list");
   } else if (getRowIndexByTagName(table, friend) > -1) {
     alertUserWithModal("Already found  the user in FriendsList userid = " + friend);
-    //clientSocketEmit("closeAlertUser",{"message":"Already found  the user in FriendsList userid = " + friend})
   } else if (friend !== null) {
     document.getElementById("addFriendSender").value = sender;
     document.getElementById("addFriendReceiver").value = friend;

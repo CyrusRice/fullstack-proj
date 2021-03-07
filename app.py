@@ -54,7 +54,6 @@ def signin():
         if useridCount > 0:
             user = db['users'].find({'userid': userid})[0]
             if bcrypt.checkpw(password, user['password']):
-                print(request.args)
                 return redirect(url_for('account', userid=userid))
         return render_template("home.html", sync_mode=socketio.async_mode)
 
