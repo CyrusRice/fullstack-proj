@@ -1,6 +1,6 @@
 {%extends "layout.html"%} {% block content %}
 <script
-  src="https://kit.fontawesome.com/7d687e7439.js"
+  defer src="https://kit.fontawesome.com/7d687e7439.js"
   crossorigin="anonymous"
 ></script>
 <script defer src="/static/js/socket.js"></script>
@@ -14,7 +14,7 @@
   <form id="getFriends">
     <input id="getFriendsSender" name="sender" type="hidden" value="" />
   </form>
-  <button type="button" id = "addFriendYesButton" class="btn btn-primary" onclick=addFriend() hidden></button>
+  <button type="button" id = "addFriendYesButton" class="btn btn-primary" onclick=addFriend() hidden>addFriendYes</button>
   <div class="container-fluid">
     <div class="row">
       <div class="col-9 border">
@@ -27,6 +27,7 @@
       </div>
       <div class="col-3 border">
         <div class="input-group mb-0">
+          <label for="search-input" hidden>search-input</label>
           <input
             id="search-input"
             type="search"
@@ -37,6 +38,7 @@
             id="search-button"
             type="button"
             class="btn btn-primary mr-2 mt-1"
+            title="search-button"
           >
             <span class="fas fa-search fa-1x"></span>
           </button>
@@ -44,6 +46,7 @@
             id="settings-button"
             type="button"
             class="btn btn-primary mr-2 mt-1"
+            title="settings-button"
           >
             <span class="fas fa-user-cog fa-1x"></span>
           </button>
@@ -52,6 +55,7 @@
             type="button"
             class="btn btn-primary mt-1"
             onclick="location.href = `{{ url_for('logout') }}`;"
+            title="logout-button"
           >
             <span class="fas fa-sign-out-alt fa-1x"></span>
           </button>
@@ -99,6 +103,7 @@
               type="button"
               class="btn btn-primary float-right mr-2 mt-1"
               onclick="addFriendUsingModal()"
+              title="addFriend-button"
             >
               <span class="fas fa-user-plus fa-1x"></span>
             </button>
@@ -106,6 +111,7 @@
               id="removeFriend-button"
               type="button"
               class="btn btn-primary float-right mr-2 mt-1 mb-1"
+              title="removeFriend-button"
             >
               <span class="fas fa-minus-circle fa-1x"></span>
             </button>
@@ -117,7 +123,7 @@
               >
                 <thead>
                   <tr>
-                    <th hidden></th>
+                    <th hidden>select</th>
                     <th style="width: 70%">Name</th>
                     <th hidden>requestStatus</th>
                     <th hidden>onlineStatus</th>
