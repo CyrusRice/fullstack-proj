@@ -41,13 +41,13 @@
   </head>
   <body>
     <!-- Button trigger Alert User modal -->
-    <button type="button" id = "alertUserButton" class="btn btn-primary" data-toggle="modal" data-target="#alertUser" value="alertUserIsClose" hidden></button>
+    <button type="button" id = "alertUserButton" class="btn btn-primary" data-toggle="modal" data-target="#alertUser" value="alertUserIsClose" hidden>AlertUser</button>
     <!-- Modal to Alert User-->
-    <div class="modal fade" id="alertUser" tabindex="-1" role="dialog" aria-labelledby="alertUserLabel" aria-hidden="true">
+    <div class="modal fade" id="alertUser" tabindex="-1" role="dialog" aria-labelledby="alertUser" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="alertUserTitle"></h5>
+            <h5 class="modal-title" id="alertUserTitle">UserMessage</h5>
           </div>
           <div class="modal-body" id="alertUserBody">
             <div id="alertUserMessage"></div>
@@ -57,10 +57,10 @@
             </form>             
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" id="alertUserYesButton" style = "width:70px;background-color: green" onclick="recordAlertUserResponse(true)"></button>
-            <button type="button" class="btn btn-primary" id="alertUserNoButton" style = "width:70px;background-color: red" onclick="recordAlertUserResponse(false)"></button>
+            <button type="button" class="btn btn-primary" id="alertUserYesButton" style = "width:70px;background-color: green" onclick="recordAlertUserResponse(true)">Yes</button>
+            <button type="button" class="btn btn-primary" id="alertUserNoButton" style = "width:70px;background-color: red" onclick="recordAlertUserResponse(false)">No</button>
             <button type="button" class="btn btn-primary" id="alertUserCancelButton" style = "width:70px;background-color: gray" onclick="closeUserAlertModal()">Close</button>
-            <button type="button" class="btn btn-secondary" id ="alertUserCloseButton" data-dismiss="modal" style = "width:70px" hidden></button>
+            <button type="button" class="btn btn-secondary" id ="alertUserCloseButton" data-dismiss="modal" style = "width:70px" hidden>Dismiss</button>
           </div>
         </div>
       </div>
