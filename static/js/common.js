@@ -56,7 +56,7 @@ function alertUserWithModal(
   }
 }
 
-function getRowIndexByTagName(table, tagName) {
+function getRowIndexByTagName(table, tagName, hideCols=[]) {
   let rowCount = table.rows.length;
   let i;
   for (i = 0; i < rowCount; i++) {
@@ -104,7 +104,7 @@ function closeUserAlertModal() {
   document.getElementById("alertUserCloseButton").click();
 }
 
-function sortTable(table, col) {
+function sortTable(table, col, hideCols=[]) {
   let rows = table.rows;
 
   let arr = new Array();
@@ -121,4 +121,43 @@ function sortTable(table, col) {
     arr[i] = "<td>" + arr[i].join("</td><td>") + "</td>";
   }
   table.innerHTML = "<tr>" + arr.join("</tr><tr>") + "</tr>";
+  hideColumnsOfTable(table,hideCols)
+}
+
+function hideColumnsOfTable(table,cols=[]) {
+  elType = table.tagName.toLowerCase()
+  console.log(elType)
+  let targetTable = table
+  console.log(targetTable.tagName.toLowerCase())
+  if (elType === "tbody") {
+    targetTable = table.parentElement
+  }
+  console.log(targetTable.tagName.toLowerCase())
+
+  if (cols.length > 0)
+    cols.forEach(function (col) {
+      let colSelector = targetTable.querySelectorAll("tr")
+      colSelector.forEach(function (row) {
+        row.cells[col].style.display = "none" 
+      })
+    })
+}
+
+function showColumnsOfTable(table,cols=[]) {
+  elType = table.tagName.toLowerCase()
+  console.log(elType)
+  let targetTable = table
+  console.log(targetTable.tagName.toLowerCase())
+  if (elType === "tbody") {
+    targetTable = table.parentElement
+  }
+  console.log(targetTable.tagName.toLowerCase())
+
+  if (cols.length > 0)
+    cols.forEach(function (col) {
+      let colSelector = targetTable.querySelectorAll("tr")
+      colSelector.forEach(function (row) {
+        row.cells[col].style.display = "block" 
+      })
+    })
 }

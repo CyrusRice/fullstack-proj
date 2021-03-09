@@ -95,7 +95,7 @@ function sortFriendsListTable() {
   let table = document
     .getElementById("friends-table")
     .getElementsByTagName("tbody")[0];
-  sortTable(table, 1);
+  sortTable(table, 1,[0,2,3,4]);
 }
 
 function addFriendToTable(data) {
