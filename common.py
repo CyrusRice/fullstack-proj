@@ -208,4 +208,4 @@ def updateFriendsListDoc(sender, receiver, action):
             result['toReceiver'] = receiverFriend
             result['status'] = "success"
 
-        return result
+    return result

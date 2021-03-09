@@ -8,7 +8,7 @@ socket.on("connect", () => {
   if (url_list.length > 1) {
     user = url_list[1];
     console.log(user + " is connected");
-    console.log(window.localStorage)
+    console.log(window.localStorage);
     socket.emit("connected", {
       userid: user,
     });
@@ -25,7 +25,9 @@ socket.on("broadcast fen", (data) => {
 socket.on("load game", (data) => {
   let game = JSON.parse(data);
   //console.log(data);
-  if (game[0].player_1 === document.getElementById('accountOwner').textContent) {
+  if (
+    game[0].player_1 === document.getElementById("accountOwner").textContent
+  ) {
     playerColor = "w";
   } else {
     playerColor = "b";
@@ -56,21 +58,28 @@ function clientSocketEmit(message, data) {
 }
 
 socket.on("connectionRecorded", () => {
-  getFriends()
+  getFriends();
 });
 
 socket.on("addFriendToTable", (data) => {
   addFriendToTable(data);
-  closeUserAlertModal()
+  sortFriendsListTable();
+  closeUserAlertModal();
 });
 socket.on("updateFriendDataInTable", (data) => {
   updateFriendDataInTable(data);
-  closeUserAlertModal()
+  sortFriendsListTable();
+  closeUserAlertModal();
 });
 socket.on("populateFriendsList", (data) => {
+  let friendsList = [];
   for (const [friendId, friendData] of Object.entries(data)) {
+    friendsList.push(friendData);
+  }
+  friendsList.sort((a, b) => (a.name > b.name ? 1 : -1));
+  friendsList.forEach(function (friendData) {
     addFriendToTable(friendData);
-  };
+  });
   //socket.emit('get games', {})
 });
 

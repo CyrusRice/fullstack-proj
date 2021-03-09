@@ -103,3 +103,22 @@ function closeUserAlertModal() {
   document.getElementById("alertUserButton").value = "alertUserIsClose";
   document.getElementById("alertUserCloseButton").click();
 }
+
+function sortTable(table, col) {
+  let rows = table.rows;
+
+  let arr = new Array();
+  for (i = 0; i < rows.length; i++) {
+    arr[i] = new Array();
+    let cells = rows[i].cells;
+    for (j = 0; j < cells.length; j++) {
+      arr[i][j] = cells[j].innerHTML;
+    }
+  }
+
+  arr.sort((a, b) => (a[col] > b[col] ? 1 : -1));
+  for (i = 0; i < rows.length; i++) {
+    arr[i] = "<td>" + arr[i].join("</td><td>") + "</td>";
+  }
+  table.innerHTML = "<tr>" + arr.join("</tr><tr>") + "</tr>";
+}

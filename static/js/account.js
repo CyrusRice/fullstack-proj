@@ -6,37 +6,51 @@ window.onload = function () {
   home.innerHTML = "";
   about.innerHTML = "";
 };
-function addFriendUsingModal() { 
-  alertUserWithModal("Please enter a Friend's ID","black","Add",null,true,"addFriendYesButton")
+function addFriendUsingModal() {
+  alertUserWithModal(
+    "Please enter a Friend's ID",
+    "black",
+    "Add",
+    null,
+    true,
+    "addFriendYesButton"
+  );
   //document.getElementById("addFriendYesButton").click()
 }
 function acceptFriendRequest() {
   let userResponse = formToDict(document.forms["alertUserInputForm"]);
-  let friend = userResponse["alertUserInputData"]
+  let friend = userResponse["alertUserInputData"];
   let sender = accountOwner.innerHTML;
 
   if (friend !== null && friend != "") {
     document.getElementById("acceptFriendSender").value = sender;
     document.getElementById("acceptFriendReceiver").value = friend;
     data = formToDict(document.forms["acceptFriend"]);
-    clientSocketEmit("acceptFriendRequest", data);    
+    clientSocketEmit("acceptFriendRequest", data);
   }
 }
 function addFriend() {
-  let table = document.getElementById("friends-table");
-  
+  let table = document
+    .getElementById("friends-table")
+    .getElementsByTagName("tbody")[0];
+
   let userResponse = formToDict(document.forms["alertUserInputForm"]);
-  let friend = null
-  if (userResponse["alertUserInputData"] !== "" && userResponse["alertUserResponse"] === "yes") {
-    friend = userResponse["alertUserInputData"]
+  let friend = null;
+  if (
+    userResponse["alertUserInputData"] !== "" &&
+    userResponse["alertUserResponse"] === "yes"
+  ) {
+    friend = userResponse["alertUserInputData"];
   }
-  
+
   //friend = prompt("Please enter a Friend's ID", "");
   let sender = accountOwner.innerHTML;
   if (friend === sender) {
     alertUserWithModal("Can't add yourself to your own friends list");
   } else if (getRowIndexByTagName(table, friend) > -1) {
-    alertUserWithModal("Already found  the user in FriendsList userid = " + friend);
+    alertUserWithModal(
+      "Already found  the user in FriendsList userid = " + friend
+    );
   } else if (friend !== null) {
     document.getElementById("addFriendSender").value = sender;
     document.getElementById("addFriendReceiver").value = friend;
@@ -54,30 +68,41 @@ function getFriends() {
   clientSocketEmit("getFriends", data);
 }
 
-
 function updateFriendDataInTable(data) {
-  let table = document.getElementById("friends-table");
+  let table = document
+    .getElementById("friends-table")
+    .getElementsByTagName("tbody")[0];
   let friendId = data["id"];
   let rowIndex = getRowIndexByTagName(table, friendId);
   if (rowIndex > -1) {
-    let ReqStatusEl = table.rows[rowIndex].cells[2]
-    let OnlineStatusEl = table.rows[rowIndex].cells[3]
-    let GameStatusEl = table.rows[rowIndex].cells[4]
-    let WinsEl = table.rows[rowIndex].cells[5]
-    let LossesEl = table.rows[rowIndex].cells[6]
-    let DrawsEl = table.rows[rowIndex].cells[7]
+    let ReqStatusEl = table.rows[rowIndex].cells[2];
+    let OnlineStatusEl = table.rows[rowIndex].cells[3];
+    let GameStatusEl = table.rows[rowIndex].cells[4];
+    let WinsEl = table.rows[rowIndex].cells[5];
+    let LossesEl = table.rows[rowIndex].cells[6];
+    let DrawsEl = table.rows[rowIndex].cells[7];
 
-    ReqStatusEl.innerHTML =  data["requestStatus"];
-    OnlineStatusEl.innerHTML = data["onlineStatus"]
-    GameStatusEl.innerHTML = data["gameStatus"]
-    WinsEl.innerHTML =  data["wins"];
-    LossesEl.innerHTML = data["losses"]
-    DrawsEl.innerHTML = data["draws"]
+    ReqStatusEl.innerHTML = data["requestStatus"];
+    OnlineStatusEl.innerHTML = data["onlineStatus"];
+    GameStatusEl.innerHTML = data["gameStatus"];
+    WinsEl.innerHTML = data["wins"];
+    LossesEl.innerHTML = data["losses"];
+    DrawsEl.innerHTML = data["draws"];
   }
-  closeUserAlertModal()
+  closeUserAlertModal();
 }
+function sortFriendsListTable() {
+  let table = document
+    .getElementById("friends-table")
+    .getElementsByTagName("tbody")[0];
+  sortTable(table, 1);
+}
+
 function addFriendToTable(data) {
-  let table = document.getElementById("friends-table");
+  let table = document
+    .getElementById("friends-table")
+    .getElementsByTagName("tbody")[0];
+  //console.log(table)
   let friendId = data["id"];
   if (getRowIndexByTagName(table, friendId) === -1) {
     let row = table.insertRow();
@@ -126,17 +151,33 @@ function addFriendToTable(data) {
 }
 
 function friendRowOnClick(friendId) {
-  let table = document.getElementById("friends-table");
+  let table = document
+    .getElementById("friends-table")
+    .getElementsByTagName("tbody")[0];
   let rowIndex = getRowIndexByTagName(table, friendId);
   if (rowIndex > -1) {
     let ReqStatus = table.rows[rowIndex].cells[2].innerHTML;
-    let friendName = table.rows[rowIndex].cells[1].innerHTML
+    let friendName = table.rows[rowIndex].cells[1].innerHTML;
     if (ReqStatus == "inviteSent") {
-      alertUserWithModal("Waiting for <u style = \"color:red\">" + friendName.bold() + "</u> to reply to your Friend Request","black");
+      alertUserWithModal(
+        'Waiting for <u style = "color:red">' +
+          friendName.bold() +
+          "</u> to reply to your Friend Request",
+        "black"
+      );
     } else if (ReqStatus == "pending") {
-      alertUserWithModal("You have New Friend Request from <u style = \"color:red\">" + friendName.bold() + "</u>","black","Accept","Reject",false,"acceptFriendYesButton","acceptFriendNoButton",friendId);
+      alertUserWithModal(
+        'You have New Friend Request from <u style = "color:red">' +
+          friendName.bold() +
+          "</u>",
+        "black",
+        "Accept",
+        "Reject",
+        false,
+        "acceptFriendYesButton",
+        "acceptFriendNoButton",
+        friendId
+      );
     }
-      
-    
   }
 }
