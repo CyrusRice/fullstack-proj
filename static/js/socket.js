@@ -8,7 +8,6 @@ socket.on("connect", () => {
   if (url_list.length > 1) {
     user = url_list[1];
     console.log(user + " is connected");
-    console.log(window.localStorage);
     socket.emit("connected", {
       userid: user,
     });

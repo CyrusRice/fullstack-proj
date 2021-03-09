@@ -6,6 +6,20 @@ window.onload = function () {
   home.innerHTML = "";
   about.innerHTML = "";
 };
+
+window.addEventListener("storage", function (event) {
+  if (event.key == "logout-event") {
+    let user = event.newValue;
+    user = user.split(":")[0];
+    if (accountOwner.innerHTML === user) {
+      console.log(
+        accountOwner.innerHTML + " has requested logout from another tab"
+      );
+      home.click();
+    }
+  }
+});
+
 function addFriendUsingModal() {
   alertUserWithModal(
     "Please enter a Friend's ID",
@@ -91,11 +105,18 @@ function updateFriendDataInTable(data) {
   }
   closeUserAlertModal();
 }
+function logout() {
+  localStorage.setItem(
+    "logout-event",
+    accountOwner.innerHTML + ":" + Math.random()
+  );
+  home.click();
+}
 function sortFriendsListTable() {
   let table = document
     .getElementById("friends-table")
     .getElementsByTagName("tbody")[0];
-  sortTable(table, 1,[0,2,3,4]);
+  sortTable(table, 1, [0, 2, 3, 4]);
 }
 
 function addFriendToTable(data) {
