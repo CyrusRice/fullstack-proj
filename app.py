@@ -120,6 +120,43 @@ def getFriends(data):
         data = getFriendsListDoc(sender,clients)
         socketio.emit('populateFriendsList',data,room=request.sid)
 
+@socketio.on('acceptFriendRequest')
+def acceptFriendRequest(data):
+    sender = data['sender']
+    receiver = data['receiver']
+    senderCount = db['users'].count_documents({'userid': sender})
+    receiverCount = db['users'].count_documents({'userid': receiver})
+
+    communityQuery = {'$and': [{'type': '1:1'}, {
+        'members': sender}, {'members': receiver}]}
+    communityCount = db['communities'].count_documents(communityQuery)
+    if senderCount > 0 and receiverCount > 0:
+        acceptInviteStatus = updateFriendsListDoc(sender, receiver, 'acceptInvite')
+        if acceptInviteStatus['status'] == 'success':
+            if communityCount > 0:
+                communityDoc = db['communities'].find_one(communityQuery)
+                membership = copy.deepcopy(communityDoc["membership"])
+                membership[receiver] = "joined"
+                membership[sender] = "joined"
+                newvalues = {"$set":{"membership":membership}}
+                db['communities'].update_one(communityQuery, newvalues)
+                results = communityDoc['results']
+                if sender in clients:
+                    senderData = acceptInviteStatus['toSender']
+                    senderData['onlineStatus'] = True
+                    senderData['wins'] = results[sender][receiver]['wins']  
+                    senderData['losses'] = results[sender][receiver]['losses'] 
+                    senderData['draws'] = results[sender][receiver]['draws']              
+                    for senderSocket in clients[sender]:
+                        socketio.emit('updateFriendDataInTable', senderData,room=senderSocket)
+                if receiver in clients:
+                    receiverData = acceptInviteStatus['toReceiver']
+                    receiverData['onlineStatus'] = True  
+                    receiverData['wins'] = results[receiver][sender]['wins']  
+                    receiverData['losses'] = results[receiver][sender]['losses'] 
+                    receiverData['draws'] = results[receiver][sender]['draws']                                
+                    for receiverSocket in clients[receiver]:
+                        socketio.emit('updateFriendDataInTable', receiverData,room=receiverSocket)
 
 @socketio.on('addFriend')
 def addFriend(data):
@@ -158,7 +195,7 @@ def addFriend(data):
                 receiverData['losses'] = results[receiver][sender]['losses'] 
                 receiverData['draws'] = results[receiver][sender]['draws']                                
                 for receiverSocket in clients[receiver]:
-                    socketio.emit('addFriendToTable', sendInviteStatus['toReceiver'],room=receiverSocket)
+                    socketio.emit('addFriendToTable', receiverData,room=receiverSocket)
     elif senderCount > 0:
         msg = "No account found with userid = " + receiver
         socketio.emit('alertUser',{'message':msg},room=request.sid)
