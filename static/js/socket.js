@@ -1,6 +1,7 @@
 let socket = io();
 let currGameId = "";
 let url = window.location.href;
+let playerColor = "";
 
 socket.on("connect", () => {
   url_list = url.replace(/^(?:\/\/|[^/]+)*\//, "").split("/");
@@ -24,6 +25,11 @@ socket.on("broadcast fen", (data) => {
 socket.on("load game", (data) => {
   let game = JSON.parse(data);
   //console.log(data);
+  if (game[0].player_1 === document.getElementById('accountOwner').textContent) {
+    playerColor = "w";
+  } else {
+    playerColor = "b";
+  }
   chess.load(game[0].fen);
   board.position(game[0].fen.split(" ")[0]);
   currGameId = game[0].gameid;

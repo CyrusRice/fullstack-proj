@@ -60,8 +60,9 @@ let config = {
   function onDrop(source, target, piece, newPos, oldPos, orientation) {
     // Move piece if valid move
     const obj = { from: source, to: target };
+    let turnColor = chess.fen().split(" ")[1];
     let moveSuccess = chess.move(obj);
-    if (moveSuccess === null || gameOver) return "snapback";
+    if (moveSuccess === null || gameOver || turnColor !== playerColor) return "snapback";
     // Stop board movement if game over
     if (chess.game_over()) gameOver = true;
     updateBoard();
