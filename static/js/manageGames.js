@@ -61,8 +61,8 @@ let config = {
     // Move piece if valid move
     const obj = { from: source, to: target };
     let turnColor = chess.fen().split(" ")[1];
-    let moveSuccess = chess.move(obj);
-    if (moveSuccess === null || gameOver || turnColor !== playerColor) return "snapback";
+    //let moveSuccess = chess.move(obj);
+    if (gameOver || turnColor !== playerColor || chess.move(obj) === null) return "snapback";
     // Stop board movement if game over
     if (chess.game_over()) gameOver = true;
     updateBoard();

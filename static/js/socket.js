@@ -33,6 +33,7 @@ socket.on("load game", (data) => {
   chess.load(game[0].fen);
   board.position(game[0].fen.split(" ")[0]);
   currGameId = game[0].gameid;
+  document.getElementById("myBoard").style = "width: 30%;display:block";
 });
 
 // Server sent games list from mongodb, add each game to home.html drop down list
