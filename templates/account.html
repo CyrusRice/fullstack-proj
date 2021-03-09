@@ -11,10 +11,16 @@
     <input id="addFriendSender" name="sender" type="hidden" value="" />
     <input id="addFriendReceiver" name="receiver" type="hidden" value="" />
   </form>
+  <form id="acceptFriend">
+    <input id="acceptFriendSender" name="sender" type="hidden" value="" />
+    <input id="acceptFriendReceiver" name="receiver" type="hidden" value="" />
+  </form>  
   <form id="getFriends">
     <input id="getFriendsSender" name="sender" type="hidden" value="" />
   </form>
   <button type="button" id = "addFriendYesButton" class="btn btn-primary" onclick=addFriend() hidden>addFriendYes</button>
+  <button type="button" id = "acceptFriendYesButton" class="btn btn-primary" onclick=acceptFriendRequest() hidden>addFriendYes</button>
+  <button type="button" id = "acceptFriendNoButton" class="btn btn-primary" onclick=rejectFriendRequest() hidden>addFriendYes</button> 
   <div class="container-fluid">
     <div class="row">
       <div class="col-9 border">

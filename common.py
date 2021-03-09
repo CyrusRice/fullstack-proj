@@ -125,11 +125,6 @@ def getFriendsListDoc(sender,clients):
         data[friendId] = friendData
     return data
                             
-
-            
-
-
-
 def updateFriendsListDoc(sender, receiver, action):
     senderDoc = db['users'].find_one({'userid': sender})
     receiverDoc = db['users'].find_one({'userid': receiver})
@@ -183,4 +178,34 @@ def updateFriendsListDoc(sender, receiver, action):
                     result['status'] = "alreadyFriends"
                 else:
                     result['status'] = "inconsistentDB"
+    if action == "acceptInvite":
+        if receiver in senderDoc["friendids"] and sender in receiverDoc["friendids"]:
+            senderFriend = dict()
+            senderFriend['id'] = receiver
+            senderFriend['name'] = receiverDoc['firstname'] + \
+                ',' + receiverDoc['lastname']
+            senderFriend['requestStatus'] = 'isFriend'
+            senderFriend['gameStatus'] = 'noActiveGame'
+            senderFriends = copy.deepcopy(senderDoc["friends"])
+            senderFriends[receiver] = senderFriend
+            senderFriendids = copy.deepcopy(senderDoc["friendids"])
+            newvalues = {"$set": {"friends": senderFriends} }
+            db['users'].update_one({'userid': sender}, newvalues)
+            result['toSender'] = senderFriend
+
+            receiverFriend = dict()
+            receiverFriend['id'] = sender
+            receiverFriend['name'] = senderDoc['firstname'] + \
+                ',' + senderDoc['lastname']
+            receiverFriend['requestStatus'] = 'isFriend'
+            receiverFriend['gameStatus'] = None
+            receiverFriends = copy.deepcopy(receiverDoc["friends"])
+            receiverFriends[sender] = receiverFriend
+            receiverFriendids = copy.deepcopy(receiverDoc["friendids"])
+            receiverFriendids.append(sender)
+            newvalues = {"$set": { "friends": receiverFriends , "friendids": receiverFriendids } }
+            db['users'].update_one({'userid': receiver}, newvalues)
+            result['toReceiver'] = receiverFriend
+            result['status'] = "success"
+
         return result

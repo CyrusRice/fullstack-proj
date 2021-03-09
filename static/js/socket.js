@@ -56,6 +56,10 @@ socket.on("addFriendToTable", (data) => {
   addFriendToTable(data);
   closeUserAlertModal()
 });
+socket.on("updateFriendDataInTable", (data) => {
+  updateFriendDataInTable(data);
+  closeUserAlertModal()
+});
 socket.on("populateFriendsList", (data) => {
   for (const [friendId, friendData] of Object.entries(data)) {
     addFriendToTable(friendData);

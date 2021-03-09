@@ -10,6 +10,18 @@ function addFriendUsingModal() {
   alertUserWithModal("Please enter a Friend's ID","black","Add",null,true,"addFriendYesButton")
   //document.getElementById("addFriendYesButton").click()
 }
+function acceptFriendRequest() {
+  let userResponse = formToDict(document.forms["alertUserInputForm"]);
+  let friend = userResponse["alertUserInputData"]
+  let sender = accountOwner.innerHTML;
+
+  if (friend !== null && friend != "") {
+    document.getElementById("acceptFriendSender").value = sender;
+    document.getElementById("acceptFriendReceiver").value = friend;
+    data = formToDict(document.forms["acceptFriend"]);
+    clientSocketEmit("acceptFriendRequest", data);    
+  }
+}
 function addFriend() {
   let table = document.getElementById("friends-table");
   
@@ -42,6 +54,28 @@ function getFriends() {
   clientSocketEmit("getFriends", data);
 }
 
+
+function updateFriendDataInTable(data) {
+  let table = document.getElementById("friends-table");
+  let friendId = data["id"];
+  let rowIndex = getRowIndexByTagName(table, friendId);
+  if (rowIndex > -1) {
+    let ReqStatusEl = table.rows[rowIndex].cells[2]
+    let OnlineStatusEl = table.rows[rowIndex].cells[3]
+    let GameStatusEl = table.rows[rowIndex].cells[4]
+    let WinsEl = table.rows[rowIndex].cells[5]
+    let LossesEl = table.rows[rowIndex].cells[6]
+    let DrawsEl = table.rows[rowIndex].cells[7]
+
+    ReqStatusEl.innerHTML =  data["requestStatus"];
+    OnlineStatusEl.innerHTML = data["onlineStatus"]
+    GameStatusEl.innerHTML = data["gameStatus"]
+    WinsEl.innerHTML =  data["wins"];
+    LossesEl.innerHTML = data["losses"]
+    DrawsEl.innerHTML = data["draws"]
+  }
+  closeUserAlertModal()
+}
 function addFriendToTable(data) {
   let table = document.getElementById("friends-table");
   let friendId = data["id"];
@@ -96,8 +130,11 @@ function friendRowOnClick(friendId) {
   let rowIndex = getRowIndexByTagName(table, friendId);
   if (rowIndex > -1) {
     let ReqStatus = table.rows[rowIndex].cells[2].innerHTML;
+    let friendName = table.rows[rowIndex].cells[1].innerHTML
     if (ReqStatus == "inviteSent") {
-      alertUserWithModal("Friend Request is already sent to <u style = \"color:red\">" + friendId.bold() + "</u> waiting for response","black","Accept","Reject");
+      alertUserWithModal("Waiting for <u style = \"color:red\">" + friendName.bold() + "</u> to reply to your Friend Request","black");
+    } else if (ReqStatus == "pending") {
+      alertUserWithModal("You have New Friend Request from <u style = \"color:red\">" + friendName.bold() + "</u>","black","Accept","Reject",false,"acceptFriendYesButton","acceptFriendNoButton",friendId);
     }
       
     
