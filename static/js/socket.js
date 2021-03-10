@@ -18,6 +18,11 @@ socket.on("connect", () => {
 socket.on("broadcast fen", (data) => {
   chess.load(data["fen"]);
   board.position(data["fen"].split(" ")[0]);
+  gameOver = data["gameover"];
+  if (gameOver === true) {
+    alertUserWithModal("Game Over");
+    //socket.emit('get games', {userId: userId});
+  }
 });
 
 // Load new game sent from server
@@ -35,6 +40,7 @@ socket.on("load game", (data) => {
   board.position(game[0].fen.split(" ")[0]);
   currGameId = game[0].gameid;
   document.getElementById("myBoard").style = "width: 30%;display:block";
+  document.getElementById("endGameBtn").style = "display:block";
 });
 
 // Server sent games list from mongodb, add each game to home.html drop down list

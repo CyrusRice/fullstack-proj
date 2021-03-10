@@ -266,8 +266,11 @@ def disconnect():
 def broadcastFen(message):
     query = {"gameid": message['currgameid']}
     newvalues = {"$set": {"fen": message['fen']}}
-    db['games'].update_one(query, newvalues)
-    emit('broadcast fen', {'fen': message['fen']}, room=message['currgameid'])
+    if message['gameover'] == True:
+        db['games'].delete_one(query)
+    else:
+        db['games'].update_one(query, newvalues)
+    emit('broadcast fen', {'fen': message['fen'], 'gameover': message['gameover']}, room=message['currgameid'])
 
 # Load new game and save old game
 

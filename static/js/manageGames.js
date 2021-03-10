@@ -55,6 +55,16 @@ let config = {
       newgameid: document.getElementById('gameslist').value,
     });
   })
+
+  // End current game
+  $('#endGameBtn').on('click', function endGame() {
+    //console.log(chess.fen());
+    //console.log(currGameId);
+    //console.log(document.getElementById('gameslist').value);
+    //alertUserWithModal("Game Over");
+    gameOver = true;
+    updateBoard();
+  })
   
   // When player makes move, validate it before accepting
   function onDrop(source, target, piece, newPos, oldPos, orientation) {
@@ -64,7 +74,8 @@ let config = {
     //let moveSuccess = chess.move(obj);
     if (gameOver || turnColor !== playerColor || chess.move(obj) === null) return "snapback";
     // Stop board movement if game over
-    if (chess.game_over()) gameOver = true;
+    if (chess.game_over())
+      gameOver = true;
     updateBoard();
   }
   
@@ -74,6 +85,7 @@ let config = {
     clientSocketEmit("update board", {
       fen: chess.fen(),
       currgameid: currGameId,
+      gameover: gameOver,
     });
   }
   //===========================================Chess Related Code(END)=========================
