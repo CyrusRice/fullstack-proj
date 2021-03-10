@@ -49,8 +49,8 @@ let config = {
     //console.log(chess.fen());
     //console.log(currGameId);
     //console.log(document.getElementById('gameslist').value);
-    clientSocketEmit('load save game', {
-      fen: chess.fen(), 
+    clientSocketEmit('load game', {
+      //fen: chess.fen(), 
       currgameid: currGameId,
       newgameid: document.getElementById('gameslist').value,
     });

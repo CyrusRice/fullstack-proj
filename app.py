@@ -264,19 +264,21 @@ def disconnect():
 
 @socketio.on('update board')
 def broadcastFen(message):
-    currFen = message['fen']
-    emit('broadcast fen', {'fen': currFen}, room=message['currgameid'])
+    query = {"gameid": message['currgameid']}
+    newvalues = {"$set": {"fen": message['fen']}}
+    db['games'].update_one(query, newvalues)
+    emit('broadcast fen', {'fen': message['fen']}, room=message['currgameid'])
 
 # Load new game and save old game
 
 
-@socketio.on('load save game')
+@socketio.on('load game')
 def saveGame(message):
-    query = {"gameid": message['currgameid']}
-    newvalues = {"$set": {"fen": message['fen']}}
+    #query = {"gameid": message['currgameid']}
+    #newvalues = {"$set": {"fen": message['fen']}}
     if message['currgameid'] != '':
       leave_room(message['currgameid'])
-      db['games'].update_one(query, newvalues)
+      #db['games'].update_one(query, newvalues)
     query = {"gameid" : message['newgameid']}
     game = dumps(list(db['games'].find(query)))
     join_room(message['newgameid'])
