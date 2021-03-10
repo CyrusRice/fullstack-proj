@@ -188,7 +188,6 @@ def updateFriendsListDoc(sender, receiver, action):
             senderFriend['gameStatus'] = 'noActiveGame'
             senderFriends = copy.deepcopy(senderDoc["friends"])
             senderFriends[receiver] = senderFriend
-            senderFriendids = copy.deepcopy(senderDoc["friendids"])
             newvalues = {"$set": {"friends": senderFriends} }
             db['users'].update_one({'userid': sender}, newvalues)
             result['toSender'] = senderFriend
@@ -201,11 +200,24 @@ def updateFriendsListDoc(sender, receiver, action):
             receiverFriend['gameStatus'] = None
             receiverFriends = copy.deepcopy(receiverDoc["friends"])
             receiverFriends[sender] = receiverFriend
-            receiverFriendids = copy.deepcopy(receiverDoc["friendids"])
-            receiverFriendids.append(sender)
-            newvalues = {"$set": { "friends": receiverFriends , "friendids": receiverFriendids } }
+            newvalues = {"$set": { "friends": receiverFriends } }
             db['users'].update_one({'userid': receiver}, newvalues)
             result['toReceiver'] = receiverFriend
             result['status'] = "success"
+    if action == "removeFriend":
+        if receiver in senderDoc["friendids"] and sender in receiverDoc["friendids"]:
+            senderFriends = copy.deepcopy(senderDoc["friends"])
+            senderFriends.pop(receiver)
+            senderFriendids = copy.deepcopy(senderDoc["friendids"])
+            senderFriendids.remove(receiver)
+            newvalues = {"$set": {"friends": senderFriends, "friendids": senderFriendids } }
+            db['users'].update_one({'userid': sender}, newvalues)
 
+            receiverFriends = copy.deepcopy(receiverDoc["friends"])
+            receiverFriends.pop(sender)
+            receiverFriendids = copy.deepcopy(receiverDoc["friendids"])
+            receiverFriendids.remove(sender)
+            newvalues = {"$set": { "friends": receiverFriends , "friendids": receiverFriendids } }
+            db['users'].update_one({'userid': receiver}, newvalues)
+            result['status'] = "success"
     return result

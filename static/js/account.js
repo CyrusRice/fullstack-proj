@@ -2,9 +2,26 @@ const home = document.getElementById("home");
 const about = document.getElementById("about");
 const accountOwner = document.getElementById("accountOwner");
 
+const friendListSelectHeader = document.getElementById(
+  "friendListSelectHeader"
+);
+const friendListRequestStatusHeader = document.getElementById(
+  "friendListRequestStatusHeader"
+);
+const friendListOnlineStatusHeader = document.getElementById(
+  "friendListOnlineStatusHeader"
+);
+const friendListGameStatusHeader = document.getElementById(
+  "friendListGameStatusHeader"
+);
+
 window.onload = function () {
   home.innerHTML = "";
   about.innerHTML = "";
+  friendListSelectHeader.innerHTML = "";
+  friendListRequestStatusHeader.innerHTML = "";
+  friendListOnlineStatusHeader.innerHTML = "";
+  friendListGameStatusHeader.innerHTML = "";
 };
 
 window.addEventListener("storage", function (event) {
@@ -19,6 +36,54 @@ window.addEventListener("storage", function (event) {
     }
   }
 });
+
+function removeFriendFromTable(data) {
+  let table = document
+    .getElementById("friends-table")
+    .getElementsByTagName("tbody")[0];
+  
+  console.log(data)
+  let friendId = data["id"];
+  let rowIndex = getRowIndexByTagName(table, friendId);
+  if (rowIndex >= 0) {
+    table.deleteRow(rowIndex);
+  }
+}
+function removeSelectedFriends() {
+  let table = document
+    .getElementById("friends-table")
+    .getElementsByTagName("tbody")[0];
+  let selectedFriends = getSelectedFrom(table);
+  let sender = accountOwner.innerHTML;
+  if (selectedFriends.length === 0) {
+    alertUserWithModal(
+      'Please <u style = "color:red">Select Friends to Remove</u> and Click Again',
+      "black"
+    );
+  } else {
+    hideColumnsOfTable(table, [0]);
+    friendListSelectHeader.innerHTML = "Select";
+    friendListSelectHeader.style.backgroundColor = "lightblue";
+    friendListSelectHeader.removeEventListener(
+      "click",
+      removeSelectedFriends,
+      false
+    );
+    data = { sender: sender, receivers: selectedFriends };
+    clientSocketEmit("removeFriends", data);
+  }
+}
+function deleteFriends() {
+  let table = document.getElementById("friends-table");
+  showColumnsOfTable(table, [0]);
+  friendListSelectHeader.innerHTML = "DEL";
+  friendListSelectHeader.style.backgroundColor = "brown";
+  friendListSelectHeader.addEventListener(
+    "click",
+    removeSelectedFriends,
+    false
+  );
+}
 
 function addFriendUsingModal() {
   alertUserWithModal(
@@ -125,6 +190,7 @@ function addFriendToTable(data) {
     .getElementsByTagName("tbody")[0];
   //console.log(table)
   let friendId = data["id"];
+  console.log(friendId)
   if (getRowIndexByTagName(table, friendId) === -1) {
     let row = table.insertRow();
     row.id = friendId;
@@ -165,8 +231,10 @@ function addFriendToTable(data) {
     let rowDraws = row.insertCell(7);
     rowDraws.innerHTML = data["draws"];
 
-    row.addEventListener("click", function () {
-      friendRowOnClick(friendId);
+    [rowUserName, rowWins, rowLosses, rowDraws].forEach(function (cellEl) {
+      cellEl.addEventListener("click", function () {
+        friendRowOnClick(friendId);
+      });
     });
   }
 }

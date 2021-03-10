@@ -6,6 +6,7 @@
 <script defer src="/static/js/socket.js"></script>
 <script defer src="/static/js/account.js"></script>
 <script defer src="/static/js/manageGames.js"></script>
+<script defer src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 <div class="account">
   <form id="addFriend">
     <input id="addFriendSender" name="sender" type="hidden" value="" />
@@ -110,6 +111,7 @@
               class="btn btn-primary float-right mr-2 mt-1"
               onclick="addFriendUsingModal()"
               title="addFriend-button"
+              style="background-color:green;"
             >
               <span class="fas fa-user-plus fa-1x"></span>
             </button>
@@ -118,22 +120,24 @@
               type="button"
               class="btn btn-primary float-right mr-2 mt-1 mb-1"
               title="removeFriend-button"
+              style="background-color:brown;"
+              onclick="deleteFriends()"
             >
               <span class="fas fa-minus-circle fa-1x"></span>
             </button>
           </br>
           <div class="table-wrapper-scroll-y my-custom-scrollbar mt-4">
               <table
-                class="table table-bordered table-striped mb-0"
+                class="table table-bordered table-striped mb-0 sortable"
                 id="friends-table"
               >
                 <thead>
                   <tr>
-                    <th hidden>select</th>
+                    <th style="display: none;" id="friendListSelectHeader">select</th>
                     <th style="width: 70%">Name</th>
-                    <th hidden>requestStatus</th>
-                    <th hidden>onlineStatus</th>
-                    <th hidden>gameStatus</th>
+                    <th style="display: none;" id="friendListRequestStatusHeader">requestStatus</th>
+                    <th style="display: none;" id="friendListOnlineStatusHeader">onlineStatus</th>
+                    <th style="display: none;" id="friendListGameStatusHeader">gameStatus</th>
                     <th>W</th>
                     <th>L</th>
                     <th>D</th>

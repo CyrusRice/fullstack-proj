@@ -203,6 +203,27 @@ def addFriend(data):
 
     #return redirect(url_for('account', userid=sender))
 
+@socketio.on('removeFriends')
+def removeFriends(data):
+    sender = data['sender']
+    receivers = data['receivers']
+    senderCount = db['users'].count_documents({'userid': sender})
+    receiverCount = dict()
+    for receiver in receivers:
+        receiverCount = db['users'].count_documents({'userid': receiver})
+        communityQuery = {'$and': [{'type': '1:1'}, {
+            'members': sender}, {'members': receiver}]}
+        communityCount = db['communities'].count_documents(communityQuery) 
+        if senderCount > 0 and receiverCount > 0:
+            removeFriendStatus = updateFriendsListDoc(sender, receiver, 'removeFriend')           
+            if removeFriendStatus['status'] == 'success':
+                if sender in clients:
+                    for senderSocket in clients[sender]:
+                        socketio.emit('removeFriendInTable', {'id':receiver},room=senderSocket)
+                if receiver in clients:
+                    for receiverSocket in clients[receiver]:
+                        socketio.emit('removeFriendInTable', {'id':sender},room=receiverSocket)
+                        
 
 @app.route('/forgotPassword')
 def forgotPassword():
