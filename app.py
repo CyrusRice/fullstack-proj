@@ -309,8 +309,13 @@ def saveGame(message):
 @socketio.on('add game')
 def addGame(message):
     gameIdCount = db['games'].count_documents({'gameid': message['gameid']})
+    player2Exists = db['users'].count_documents({'userid': message['p2']})
+    invalidGameId = False
+    invalidPlayer2 = False
     if gameIdCount > 0:
-        flash('gameid already exists, pick a different one')
+        invalidGameId = True
+    elif player2Exists == 0:
+        invalidPlayer2 = True
     else:
         newgame = dict()
         newgame['gameid'] = message['gameid']
@@ -318,6 +323,8 @@ def addGame(message):
         newgame['player_1'] = message['p1']
         newgame['player_2'] = message['p2']
         db['games'].insert_one(newgame)
+    emit('add game', {'gameid' : message['gameid'], 'p1' : message['p1'], 'p2' : message['p2'],
+        'invalidgameid' : invalidGameId, 'invalidplayer2' : invalidPlayer2}, broadcast=True)
 
 # Fill in the games list for all games user is in
 @socketio.on('get games')
