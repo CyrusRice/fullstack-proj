@@ -42,7 +42,6 @@ function removeFriendFromTable(data) {
     .getElementById("friends-table")
     .getElementsByTagName("tbody")[0];
   
-  console.log(data)
   let friendId = data["id"];
   let rowIndex = getRowIndexByTagName(table, friendId);
   if (rowIndex >= 0) {
@@ -167,6 +166,11 @@ function updateFriendDataInTable(data) {
     WinsEl.innerHTML = data["wins"];
     LossesEl.innerHTML = data["losses"];
     DrawsEl.innerHTML = data["draws"];
+    if (data["onlineStatus"]) {
+      document.getElementById(friendId + '_dot').classList.add("dot-online")
+    } else {
+      document.getElementById(friendId + '_dot').classList.remove("dot-online")
+    }    
   }
   closeUserAlertModal();
 }
@@ -190,7 +194,6 @@ function addFriendToTable(data) {
     .getElementsByTagName("tbody")[0];
   //console.log(table)
   let friendId = data["id"];
-  console.log(friendId)
   if (getRowIndexByTagName(table, friendId) === -1) {
     let row = table.insertRow();
     row.id = friendId;
@@ -203,8 +206,14 @@ function addFriendToTable(data) {
     selectrow.style.display = "none";
 
     let rowUserName = row.insertCell(1);
-    rowUserName.innerHTML = data["name"];
+    rowUserName.innerHTML = '<span class = "dot dot-sm" id ="' + friendId + '_dot"></span> ' + data["name"];
     rowUserName.style.width = "70%";
+    
+    if (data["onlineStatus"]) {
+      document.getElementById(friendId + '_dot').classList.add("dot-online")
+    } else {
+      document.getElementById(friendId + '_dot').classList.remove("dot-online")
+    }
 
     let rowReqStatus = row.insertCell(2);
     rowReqStatus.innerHTML = data["requestStatus"];

@@ -93,6 +93,36 @@ def createNewCommunityDoc(communitytype, communityid, owner, members):
     db['communities'].insert_one(newcommunity)
 
 
+def getFriendDataFromDoc(sender,friendId,clients):
+    senderDoc = db['users'].find_one({'userid': sender})
+    friendData = dict()
+    if friendId in senderDoc["friendids"]:
+        friendDataDoc = senderDoc['friends'][friendId]     
+        friendData['id'] = friendDataDoc['id']
+        friendData['name'] = friendDataDoc['name']
+        friendData['requestStatus'] = friendDataDoc['requestStatus']
+        friendData['gameStatus'] = friendDataDoc['gameStatus']
+        if friendId in clients:
+            friendData['onlineStatus'] = True
+        else:
+            friendData['onlineStatus'] = False
+        communityQuery = {'$and': [{'type': '1:1'}, {
+            'members': sender}, {'members': friendId}]}
+        communityCount = db['communities'].count_documents(communityQuery)
+        if communityCount > 0:
+            communityDoc = db['communities'].find_one(communityQuery)
+            results = communityDoc['results'][sender]
+            friendResults = results[friendId]
+
+            friendData['wins'] = friendResults['wins']  
+            friendData['losses'] = friendResults['losses'] 
+            friendData['draws'] = friendResults['draws'] 
+        else:
+            friendData['wins'] = 0
+            friendData['losses'] = 0
+            friendData['draws'] = 0
+    return friendData        
+
 def getFriendsListDoc(sender,clients):
     senderDoc = db['users'].find_one({'userid': sender})
     data = dict()

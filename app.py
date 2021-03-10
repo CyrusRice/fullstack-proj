@@ -119,6 +119,13 @@ def getFriends(data):
     if senderCount > 0:
         data = getFriendsListDoc(sender,clients)
         socketio.emit('populateFriendsList',data,room=request.sid)
+        for friend in data:
+            if friend in clients:
+                dataToFriend = getFriendDataFromDoc(friend,sender,clients)
+                for friendSocket in clients[friend]:
+                    socketio.emit('updateFriendDataInTable', dataToFriend,room=friendSocket)
+
+
 
 @socketio.on('acceptFriendRequest')
 def acceptFriendRequest(data):
@@ -260,6 +267,15 @@ def disconnect():
             clients.pop(userOnSocket)
         else:
             clients[userOnSocket] = userSockets
+        userOnSocketCount = db['users'].count_documents({'userid': userOnSocket})
+        if userOnSocketCount > 0:
+            friendsOnSocket = getFriendsListDoc(userOnSocket,clients)
+            for friend in friendsOnSocket:
+                if friend in clients:
+                    dataToFriend = getFriendDataFromDoc(friend,userOnSocket,clients)
+                    for friendSocket in clients[friend]:
+                        socketio.emit('updateFriendDataInTable', dataToFriend,room=friendSocket)
+
 
 
 @socketio.on('update board')
