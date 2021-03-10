@@ -125,8 +125,8 @@
             >
               <span class="fas fa-minus-circle fa-1x"></span>
             </button>
-          </br>
-          <div class="table-wrapper-scroll-y my-custom-scrollbar mt-4">
+            </br>
+            <div class="table-wrapper-scroll-y my-custom-scrollbar mt-4">
               <table
                 class="table table-bordered table-striped mb-0 sortable"
                 id="friends-table"
@@ -153,7 +153,60 @@
             role="tabpanel"
             aria-labelledby="CommunitiesTab"
           >
-            Communities Tab content
+            <button
+              id="createCommunity-button"
+              type="button"
+              class="btn btn-primary float-right mr-2 mt-1"
+              title="createCommunity-button"
+              style="background-color:green;"
+            >
+              <span>Create</span>
+            </button>
+            <button
+              id="deleteCommunity-button"
+              type="button"
+              class="btn btn-primary float-right mr-2 mt-1 mb-1"
+              title="deleteCommunity-button"
+              style="background-color:brown;"
+            >
+              <span>Delete</span>
+            </button>
+            <button
+              id="joinCommunity-button"
+              type="button"
+              class="btn btn-primary float-left ml-2 mt-1"
+              title="joinCommunity-button"
+              style="background-color:green;"
+            >
+              <span>Join</span>
+            </button>
+            <button
+              id="leaveCommunity-button"
+              type="button"
+              class="btn btn-primary float-left ml-2 mt-1 mb-1"
+              title="leaveCommunity-button"
+              style="background-color:brown;"
+            >
+              <span>Leave</span>
+            </button>            
+            </br>      
+            <div class="table-wrapper-scroll-y my-custom-scrollbar mt-4">
+              <table
+                class="table table-bordered table-striped mb-0 sortable"
+                id="communities-table"
+              >
+                <thead>
+                  <tr>
+                    <th style="display: none;" id="communityListSelectHeader">select</th>
+                    <th style="width: 70%">Name</th>
+                    <th>W</th>
+                    <th>L</th>
+                    <th>D</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>              
           </div>
           <div
             class="tab-pane fade"
