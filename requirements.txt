@@ -17,6 +17,7 @@ flask==1.1.2; (python_version >= "2.7" and python_full_version < "3.0.0") or (py
 gevent-websocket==0.10.1
 gevent==21.1.2; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.5.0")
 greenlet==1.0.0; python_version >= "2.7" and python_full_version < "3.0.0" and platform_python_implementation == "CPython" or python_full_version >= "3.5.0" and platform_python_implementation == "CPython"
+gunicorn==20.0.4; python_version >= "3.4"
 http-ece==1.1.0
 idna==2.10; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
 itsdangerous==1.1.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
