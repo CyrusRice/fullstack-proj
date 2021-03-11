@@ -2,7 +2,9 @@ from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_socketio import SocketIO, emit, join_room, leave_room
 import bcrypt
 
-import gevent
+from gevent import monkey
+monkey.patch_all()
+
 from common import *
 import copy
 from bson.json_util import dumps
