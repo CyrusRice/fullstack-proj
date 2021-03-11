@@ -6,7 +6,7 @@ import random
 
 import os
 
-dbclient = MongoClient(os.getenv("MONGODB_URI","mongodb://localhost:27017/"))
+dbclient = MongoClient("mongodb+srv://user:pass@onboardgames.xuuxa.mongodb.net/OnBoardGames?retryWrites=true&w=majority")
 db = dbclient["OnBoardGames"]
 
 dbModels = dict()
