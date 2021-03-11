@@ -31,10 +31,10 @@ let config = {
     let p1 = document.getElementById('accountOwner').textContent;
     let p2 = document.getElementById('invitedPlayer').value;
     let gameId = document.getElementById('gameId').value;
-    let newGame = document.createElement("option");
-    newGame.value = gameId;
-    newGame.textContent = gameId;
-    document.getElementById('gameslist').appendChild(newGame);
+    //let newGame = document.createElement("option");
+    //newGame.value = gameId;
+    //newGame.textContent = gameId;
+    //document.getElementById('gameslist').appendChild(newGame);
     clientSocketEmit('add game', {
       gameid: gameId,
       p1: p1,
@@ -72,7 +72,7 @@ let config = {
     const obj = { from: source, to: target };
     let turnColor = chess.fen().split(" ")[1];
     //let moveSuccess = chess.move(obj);
-    if (gameOver || turnColor !== playerColor || chess.move(obj) === null) return "snapback";
+    if (gameOver || ((playerColor !== "n/a") && (turnColor !== playerColor)) || chess.move(obj) === null) return "snapback";
     // Stop board movement if game over
     if (chess.game_over())
       gameOver = true;

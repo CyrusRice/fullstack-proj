@@ -25,6 +25,27 @@ socket.on("broadcast fen", (data) => {
   }
 });
 
+// Update board/game based on other clients moves
+socket.on("add game", (data) => {
+  if ((data['p1'] === document.getElementById('accountOwner').textContent) ||
+  (data['p2'] === document.getElementById('accountOwner').textContent)) {
+    if ((data['invalidgameid'] === false) && (data['invalidplayer2'] === false)) {
+      let newGame = document.createElement("option");
+      newGame.value = data['gameid'];
+      newGame.textContent = data['gameid'];
+      document.getElementById('gameslist').appendChild(newGame);
+    } else if (data['p1'] === document.getElementById('accountOwner').textContent) {
+      if (data['invalidgameid'] === true) {
+        alertUserWithModal("That game id is already in use");
+      } else if (data['invalidplayer2'] === true) {
+        alertUserWithModal("No user with that user id exists");
+      }
+    }
+    //console.log('stuff');
+  }
+  //console.log('stuff2');
+});
+
 // Load new game sent from server
 socket.on("load game", (data) => {
   let game = JSON.parse(data);
@@ -32,7 +53,12 @@ socket.on("load game", (data) => {
   if (
     game[0].player_1 === document.getElementById("accountOwner").textContent
   ) {
-    playerColor = "w";
+    // If playing self, don't assign a piece color to player
+    if (game[0].player_1 === game[0].player_2) {
+      playerColor = "n/a";
+    } else {
+      playerColor = "w";
+    }
   } else {
     playerColor = "b";
   }
