@@ -79,7 +79,6 @@ function getSelectedFrom(table) {
   for (i = 0; i < rowCount; i++) {
     let row = table.rows[i];
     let tagName = row.id;
-    console.log(tagName);
     let cb = document.getElementById(tagName + "_cb");
     if (cb.checked === true) {
       selectedRows.splice(0, 0, tagName);
@@ -123,7 +122,6 @@ function closeUserAlertModal() {
 function hideColumnsOfTable(table, cols = []) {
   elType = table.tagName.toLowerCase();
   let targetTable = table;
-  console.log(targetTable.tagName.toLowerCase());
   if (elType === "tbody") {
     targetTable = table.parentElement;
   }
