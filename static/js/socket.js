@@ -94,7 +94,6 @@ socket.on("connectionRecorded", () => {
 
 socket.on("addFriendToTable", (data) => {
   addFriendToTable(data);
-  //sortFriendsListTable();
   closeUserAlertModal();
 });
 
@@ -104,7 +103,6 @@ socket.on("removeFriendInTable", (data) => {
 
 socket.on("updateFriendDataInTable", (data) => {
   updateFriendDataInTable(data);
-  //sortFriendsListTable();
   closeUserAlertModal();
 });
 socket.on("populateFriendsList", (data) => {
