@@ -97,8 +97,14 @@ socket.on("addFriendToTable", (data) => {
   closeUserAlertModal();
 });
 
+socket.on("addCommunityToTable", (data) => {
+  addCommunityToTable(data);
+  closeUserAlertModal();
+});
+
 socket.on("removeFriendInTable", (data) => {
   removeFriendFromTable(data);
+  closeUserAlertModal();
 });
 
 socket.on("updateFriendDataInTable", (data) => {

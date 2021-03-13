@@ -15,6 +15,18 @@ const friendListGameStatusHeader = document.getElementById(
   "friendListGameStatusHeader"
 );
 
+const communityListSelectHeader = document.getElementById(
+  "communityListSelectHeader"
+);
+const communityListRequestStatusHeader = document.getElementById(
+  "communityListRequestStatusHeader"
+);
+const communityListMembersHeader = document.getElementById(
+  "communityListMembersHeader"
+);
+const communityTab = document.getElementById("CommunitiesTab");
+const friendsTab = document.getElementById("friendsTab");
+
 window.onload = function () {
   home.innerHTML = "";
   about.innerHTML = "";
@@ -41,7 +53,7 @@ function removeFriendFromTable(data) {
   let table = document
     .getElementById("friends-table")
     .getElementsByTagName("tbody")[0];
-  
+
   let friendId = data["id"];
   let rowIndex = getRowIndexByTagName(table, friendId);
   if (rowIndex >= 0) {
@@ -60,6 +72,7 @@ function removeSelectedFriends() {
       "black"
     );
   } else {
+    clearSelectionFrom(table)
     hideColumnsOfTable(table, [0]);
     friendListSelectHeader.innerHTML = "Select";
     friendListSelectHeader.style.backgroundColor = "lightblue";
@@ -85,6 +98,11 @@ function deleteFriends() {
 }
 
 function addFriendUsingModal() {
+  let table = document
+  .getElementById("friends-table")
+  .getElementsByTagName("tbody")[0];
+  clearSelectionFrom(table)
+  hideColumnsOfTable(table, [0]);
   alertUserWithModal(
     "Please enter a Friend's ID",
     "black",
@@ -95,6 +113,95 @@ function addFriendUsingModal() {
   );
   //document.getElementById("addFriendYesButton").click()
 }
+
+function createCommunityUsingModal() {
+  let table = document
+  .getElementById("friends-table")
+  .getElementsByTagName("tbody")[0];
+  clearSelectionFrom(table)
+  hideColumnsOfTable(table, [0]);  
+  alertUserWithModal(
+    "Please enter a <strong> CommunityID,CommunityName </strong> <div> Then <strong>Select</strong> members from <strong>FriendsList</strong></div>",
+    "black",
+    "Create",
+    null,
+    true,
+    "createCommunityYesButton"
+  );
+  //document.getElementById("addFriendYesButton").click()
+}
+
+function createCommunity() {
+  let table = document
+    .getElementById("communities-table")
+    .getElementsByTagName("tbody")[0];
+  let userResponse = formToDict(document.forms["alertUserInputForm"]);
+  let communityId = null;
+  if (
+    userResponse["alertUserInputData"] !== "" &&
+    userResponse["alertUserResponse"] === "yes"
+  ) {
+    communityId = userResponse["alertUserInputData"];
+  }
+
+  let sender = accountOwner.innerHTML;
+  if (getRowIndexByTagName(table, communityId) > -1) {
+    alertUserWithModal(
+      "Already found  the community in CommunitiesList communityId = " +
+        communityId
+    );
+  } else if (communityId !== null) {
+    document.getElementById("createCommunitySender").value = sender;
+    document.getElementById("createCommunityId").value = communityId;
+    selectMembersToAdd();
+  } else {
+    document.getElementById("createCommunitySender").value = "";
+    document.getElementById("createCommunityId").value = "";
+    msg = document.getElementById("alertUserMessage").innerHTML;
+    if (!msg.includes("empty"))
+      msg = msg + '<div style = "color:red">Community Id can\'t be empty</div>';
+    document.getElementById("alertUserMessage").innerHTML = msg;
+  }
+}
+function addSelectedToCommunity() {
+  let communityId = document.getElementById("createCommunityId").value;
+  let sender = accountOwner.innerHTML;
+  let table = document
+    .getElementById("friends-table")
+    .getElementsByTagName("tbody")[0];
+  let members = getSelectedFrom(table);
+  members.push(sender);
+  clearSelectionFrom(table)
+  hideColumnsOfTable(table, [0]);
+  friendListSelectHeader.innerHTML = "Select";
+  friendListSelectHeader.style.backgroundColor = "lightblue";
+  friendListSelectHeader.removeEventListener(
+    "click",
+    removeSelectedFriends,
+    false
+  );
+  data = {
+    owner: sender,
+    members: members,
+    communityid: communityId,
+    communitytype: "group",
+  };
+  clientSocketEmit("createCommunity", data);
+}
+function selectMembersToAdd() {
+  let table = document.getElementById("friends-table");
+  closeUserAlertModal();
+  friendsTab.click();
+  showColumnsOfTable(table, [0]);
+  friendListSelectHeader.innerHTML = "ADD";
+  friendListSelectHeader.style.backgroundColor = "green";
+  friendListSelectHeader.addEventListener(
+    "click",
+    addSelectedToCommunity,
+    false
+  );
+}
+
 function acceptFriendRequest() {
   let userResponse = formToDict(document.forms["alertUserInputForm"]);
   let friend = userResponse["alertUserInputData"];
@@ -105,6 +212,17 @@ function acceptFriendRequest() {
     document.getElementById("acceptFriendReceiver").value = friend;
     data = formToDict(document.forms["acceptFriend"]);
     clientSocketEmit("acceptFriendRequest", data);
+  }
+}
+
+function rejectFriendRequest() {
+  let userResponse = formToDict(document.forms["alertUserInputForm"]);
+  let friend = userResponse["alertUserInputData"];
+  let sender = accountOwner.innerHTML;
+
+  if (friend !== null && friend != "") {
+    data = { sender: sender, receivers: [friend] };
+    clientSocketEmit("removeFriends", data);
   }
 }
 function addFriend() {
@@ -167,10 +285,10 @@ function updateFriendDataInTable(data) {
     LossesEl.innerHTML = data["losses"];
     DrawsEl.innerHTML = data["draws"];
     if (data["onlineStatus"]) {
-      document.getElementById(friendId + '_dot').classList.add("dot-online")
+      document.getElementById(friendId + "_dot").classList.add("dot-online");
     } else {
-      document.getElementById(friendId + '_dot').classList.remove("dot-online")
-    }    
+      document.getElementById(friendId + "_dot").classList.remove("dot-online");
+    }
   }
   closeUserAlertModal();
 }
@@ -206,13 +324,20 @@ function addFriendToTable(data) {
     selectrow.style.display = "none";
 
     let rowUserName = row.insertCell(1);
-    rowUserName.innerHTML = '<span class = "dot dot-sm" id ="' + friendId + '_dot"></span> ' + data["name"];
+    rowUserName.innerHTML =
+      '<span class = "dot dot-sm" id ="' +
+      friendId +
+      '_dot"></span><span id ="' +
+      friendId +
+      '_name">' +
+      data["name"] +
+      "</span>";
     rowUserName.style.width = "70%";
-    
+
     if (data["onlineStatus"]) {
-      document.getElementById(friendId + '_dot').classList.add("dot-online")
+      document.getElementById(friendId + "_dot").classList.add("dot-online");
     } else {
-      document.getElementById(friendId + '_dot').classList.remove("dot-online")
+      document.getElementById(friendId + "_dot").classList.remove("dot-online");
     }
 
     let rowReqStatus = row.insertCell(2);
@@ -255,13 +380,19 @@ function friendRowOnClick(friendId) {
   let rowIndex = getRowIndexByTagName(table, friendId);
   if (rowIndex > -1) {
     let ReqStatus = table.rows[rowIndex].cells[2].innerHTML;
-    let friendName = table.rows[rowIndex].cells[1].innerHTML;
+    let friendName = document.getElementById(friendId + "_name").innerHTML;
     if (ReqStatus == "inviteSent") {
       alertUserWithModal(
         'Waiting for <u style = "color:red">' +
           friendName.bold() +
-          "</u> to reply to your Friend Request",
-        "black"
+          '</u> to reply to your Friend Request <div>Do you want to <strong style = "color:red">Rescind/Cancel</strong> to sent invite?</div>',
+        "black",
+        null,
+        "Rescind",
+        false,
+        null,
+        "acceptFriendNoButton",
+        friendId
       );
     } else if (ReqStatus == "pending") {
       alertUserWithModal(

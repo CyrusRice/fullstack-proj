@@ -44,7 +44,7 @@ function alertUserWithModal(
   if (noButton !== null) {
     noButtonEl.innerHTML = noButton;
     noButtonEl.style.display = "block";
-    noButtonEl.value = yesResponseId;
+    noButtonEl.value = noResponseId;
   } else {
     noButtonEl.innerHTML = "";
     noButtonEl.style.display = "none";
@@ -149,4 +149,47 @@ function showColumnsOfTable(table, cols = []) {
         row.cells[col].style.display = "block";
       });
     });
+}
+function clearSelectionFrom(table) {
+  let rowCount = table.rows.length;    
+  let i;
+  for(i=0;i<rowCount;i++){
+    let row = table.rows[i];
+    let tagName = row.id;
+    let cb = document.getElementById(tagName + "_cb");
+    cb.checked = false;
+  }
+}
+
+function selectAllFrom(table) {
+  let rowCount = table.rows.length;    
+  let i;
+  for(i=0;i<rowCount;i++){
+    let row = table.rows[i];
+    let tagName = row.id;
+    let cb = document.getElementById(tagName + "_cb");
+    cb.checked = true;
+  }
+}
+
+function enableAllFrom(table) {
+let rowCount = table.rows.length;    
+let i;
+for(i=0;i<rowCount;i++){
+  let row = table.rows[i];
+  let tagName = row.id;
+  let cb = document.getElementById(tagName + "_cb");
+  cb.disabled = false;
+}
+}
+
+function disableAllFrom(table) {
+let rowCount = table.rows.length;    
+let i;
+for(i=0;i<rowCount;i++){
+  let row = table.rows[i];
+  let tagName = row.id;
+  let cb = document.getElementById(tagName + "_cb");
+  cb.disabled = true;
+}
 }

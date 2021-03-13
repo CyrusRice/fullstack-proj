@@ -50,10 +50,16 @@ def signin():
         userid = request.form['userid']
         password = request.form['password'].encode('utf-8')
         useridCount = db['users'].count_documents({'userid': userid})
+        msg = ''
         if useridCount > 0:
             user = db['users'].find({'userid': userid})[0]
             if bcrypt.checkpw(password, user['password']):
                 return redirect(url_for('account', userid=userid))
+            else:
+                msg = "incorrect password for userid = " + userid
+        else:
+            msg = userid + " doesn't exist in database"
+        flash(msg)
         return render_template("home.html", sync_mode=socketio.async_mode)
 
 # Add new game, may move this code elsewhere
@@ -111,19 +117,20 @@ def createAccount():
         flash(msg)
         return redirect(url_for('signup'))
 
+
 @socketio.on('getFriends')
 def getFriends(data):
     sender = data['sender']
     senderCount = db['users'].count_documents({'userid': sender})
     if senderCount > 0:
-        data = getFriendsListDoc(sender,clients)
-        socketio.emit('populateFriendsList',data,room=request.sid)
+        data = getFriendsListDoc(sender, clients)
+        socketio.emit('populateFriendsList', data, room=request.sid)
         for friend in data:
             if friend in clients:
-                dataToFriend = getFriendDataFromDoc(friend,sender,clients)
+                dataToFriend = getFriendDataFromDoc(friend, sender, clients)
                 for friendSocket in clients[friend]:
-                    socketio.emit('updateFriendDataInTable', dataToFriend,room=friendSocket)
-
+                    socketio.emit('updateFriendDataInTable',
+                                  dataToFriend, room=friendSocket)
 
 
 @socketio.on('acceptFriendRequest')
@@ -137,33 +144,76 @@ def acceptFriendRequest(data):
         'members': sender}, {'members': receiver}]}
     communityCount = db['communities'].count_documents(communityQuery)
     if senderCount > 0 and receiverCount > 0:
-        acceptInviteStatus = updateFriendsListDoc(sender, receiver, 'acceptInvite')
+        acceptInviteStatus = updateFriendsListDoc(
+            sender, receiver, 'acceptInvite')
         if acceptInviteStatus['status'] == 'success':
             if communityCount > 0:
                 communityDoc = db['communities'].find_one(communityQuery)
                 membership = copy.deepcopy(communityDoc["membership"])
                 membership[receiver] = "joined"
                 membership[sender] = "joined"
-                newvalues = {"$set":{"membership":membership}}
+                newvalues = {"$set": {"membership": membership}}
                 db['communities'].update_one(communityQuery, newvalues)
                 results = communityDoc['results']
                 if sender in clients:
                     senderData = acceptInviteStatus['toSender']
-                    senderData['onlineStatus'] = True
-                    senderData['wins'] = results[sender][receiver]['wins']  
-                    senderData['losses'] = results[sender][receiver]['losses'] 
-                    senderData['draws'] = results[sender][receiver]['draws']              
+                    if receiver in clients:
+                        senderData['onlineStatus'] = True
+                    else:
+                        senderData['onlineStatus'] = False
+                    senderData['wins'] = results[sender][receiver]['wins']
+                    senderData['losses'] = results[sender][receiver]['losses']
+                    senderData['draws'] = results[sender][receiver]['draws']
                     for senderSocket in clients[sender]:
-                        socketio.emit('updateFriendDataInTable', senderData,room=senderSocket)
+                        socketio.emit('updateFriendDataInTable',
+                                      senderData, room=senderSocket)
                 if receiver in clients:
                     receiverData = acceptInviteStatus['toReceiver']
-                    receiverData['onlineStatus'] = True  
-                    receiverData['wins'] = results[receiver][sender]['wins']  
-                    receiverData['losses'] = results[receiver][sender]['losses'] 
-                    receiverData['draws'] = results[receiver][sender]['draws']                                
+                    if sender in clients:
+                        receiverData['onlineStatus'] = True
+                    else:
+                        receiverData['onlineStatus'] = False
+                    receiverData['wins'] = results[receiver][sender]['wins']
+                    receiverData['losses'] = results[receiver][sender]['losses']
+                    receiverData['draws'] = results[receiver][sender]['draws']
                     for receiverSocket in clients[receiver]:
-                        socketio.emit('updateFriendDataInTable', receiverData,room=receiverSocket)
+                        socketio.emit('updateFriendDataInTable',
+                                      receiverData, room=receiverSocket)
 
+
+@socketio.on('createCommunity')
+def createCommunity(data):
+    owner = data['owner']
+    members = data['members']
+    communityid = data['communityid']
+    communitytype = data['communitytype']
+    communityQuery = {
+        '$and': [{'type': communitytype}, {'communityid': communityid}]}
+    communityCount = db['communities'].count_documents(communityQuery)
+    if communityCount == 0:
+        createNewCommunityDoc(
+                    communitytype, communityid, owner, members)
+        communityDoc = db['communities'].find_one(communityQuery)
+        results = communityDoc['results']
+        members = communityDoc['members']
+        membership = communityDoc['membership']
+        for member in members:
+            if member in clients:
+                memberData = dict()
+                memberData['communityid'] = communityDoc['communityid']
+                memberData['members'] = members
+                memberData['owner'] = communityDoc['owner']
+                memberData['wins'] = 0
+                memberData['losses'] = 0
+                memberData['draws'] = 0
+                memberData['membership'] =membership[member]
+                for opponent in [x for x in newcommunity['members'] if x != member]:
+                    memberData['wins'] += results[member][opponent]['wins']
+                    memberData['losses'] += results[member][opponent]['losses']
+                    memberData['draws'] += results[member][opponent]['draws']
+                for memberSocket in clients[member]:
+                    socketio.emit('addCommunityToTable',
+                                  memberData, room=memberSocket)
 @socketio.on('addFriend')
 def addFriend(data):
     sender = data['sender']
@@ -183,31 +233,40 @@ def addFriend(data):
                 communityid = sender + '_' + receiver
                 owner = sender
                 members = [sender, receiver]
-                createNewCommunityDoc(communitytype, communityid, owner, members)
+                createNewCommunityDoc(
+                    communitytype, communityid, owner, members)
             communityDoc = db['communities'].find_one(communityQuery)
             results = communityDoc['results']
             if sender in clients:
                 senderData = sendInviteStatus['toSender']
-                senderData['onlineStatus'] = True
-                senderData['wins'] = results[sender][receiver]['wins']  
-                senderData['losses'] = results[sender][receiver]['losses'] 
-                senderData['draws'] = results[sender][receiver]['draws']              
+                if receiver in clients:
+                    senderData['onlineStatus'] = True
+                else:
+                    senderData['onlineStatus'] = False
+                senderData['wins'] = results[sender][receiver]['wins']
+                senderData['losses'] = results[sender][receiver]['losses']
+                senderData['draws'] = results[sender][receiver]['draws']
                 for senderSocket in clients[sender]:
-                    socketio.emit('addFriendToTable', senderData,room=senderSocket)
+                    socketio.emit('addFriendToTable',
+                                  senderData, room=senderSocket)
             if receiver in clients:
                 receiverData = sendInviteStatus['toReceiver']
-                receiverData['onlineStatus'] = True  
-                receiverData['wins'] = results[receiver][sender]['wins']  
-                receiverData['losses'] = results[receiver][sender]['losses'] 
-                receiverData['draws'] = results[receiver][sender]['draws']                                
+                if sender in clients:
+                    receiverData['onlineStatus'] = True
+                else:
+                    receiverData['onlineStatus'] = False
+                receiverData['wins'] = results[receiver][sender]['wins']
+                receiverData['losses'] = results[receiver][sender]['losses']
+                receiverData['draws'] = results[receiver][sender]['draws']
                 for receiverSocket in clients[receiver]:
-                    socketio.emit('addFriendToTable', receiverData,room=receiverSocket)
+                    socketio.emit('addFriendToTable',
+                                  receiverData, room=receiverSocket)
     elif senderCount > 0:
         msg = "No account found with userid = " + receiver
-        socketio.emit('alertUser',{'message':msg},room=request.sid)
-            
+        socketio.emit('alertUser', {'message': msg}, room=request.sid)
 
-    #return redirect(url_for('account', userid=sender))
+    # return redirect(url_for('account', userid=sender))
+
 
 @socketio.on('removeFriends')
 def removeFriends(data):
@@ -219,17 +278,20 @@ def removeFriends(data):
         receiverCount = db['users'].count_documents({'userid': receiver})
         communityQuery = {'$and': [{'type': '1:1'}, {
             'members': sender}, {'members': receiver}]}
-        communityCount = db['communities'].count_documents(communityQuery) 
+        communityCount = db['communities'].count_documents(communityQuery)
         if senderCount > 0 and receiverCount > 0:
-            removeFriendStatus = updateFriendsListDoc(sender, receiver, 'removeFriend')           
+            removeFriendStatus = updateFriendsListDoc(
+                sender, receiver, 'removeFriend')
             if removeFriendStatus['status'] == 'success':
                 if sender in clients:
                     for senderSocket in clients[sender]:
-                        socketio.emit('removeFriendInTable', {'id':receiver},room=senderSocket)
+                        socketio.emit('removeFriendInTable', {
+                                      'id': receiver}, room=senderSocket)
                 if receiver in clients:
                     for receiverSocket in clients[receiver]:
-                        socketio.emit('removeFriendInTable', {'id':sender},room=receiverSocket)
-                        
+                        socketio.emit('removeFriendInTable', {
+                                      'id': sender}, room=receiverSocket)
+
 
 @app.route('/forgotPassword')
 def forgotPassword():
@@ -246,8 +308,7 @@ def connected(data):
 
     userSockets.append(request.sid)
     clients[data['userid']] = userSockets
-    socketio.emit('connectionRecorded',{'message':data},room=request.sid)
-
+    socketio.emit('connectionRecorded', {'message': data}, room=request.sid)
 
 
 @socketio.on('disconnect')
@@ -266,15 +327,17 @@ def disconnect():
             clients.pop(userOnSocket)
         else:
             clients[userOnSocket] = userSockets
-        userOnSocketCount = db['users'].count_documents({'userid': userOnSocket})
+        userOnSocketCount = db['users'].count_documents(
+            {'userid': userOnSocket})
         if userOnSocketCount > 0:
-            friendsOnSocket = getFriendsListDoc(userOnSocket,clients)
+            friendsOnSocket = getFriendsListDoc(userOnSocket, clients)
             for friend in friendsOnSocket:
                 if friend in clients:
-                    dataToFriend = getFriendDataFromDoc(friend,userOnSocket,clients)
+                    dataToFriend = getFriendDataFromDoc(
+                        friend, userOnSocket, clients)
                     for friendSocket in clients[friend]:
-                        socketio.emit('updateFriendDataInTable', dataToFriend,room=friendSocket)
-
+                        socketio.emit('updateFriendDataInTable',
+                                      dataToFriend, room=friendSocket)
 
 
 @socketio.on('update board')
@@ -285,7 +348,8 @@ def broadcastFen(message):
         db['games'].delete_one(query)
     else:
         db['games'].update_one(query, newvalues)
-    emit('broadcast fen', {'fen': message['fen'], 'gameover': message['gameover']}, room=message['currgameid'])
+    emit('broadcast fen', {
+         'fen': message['fen'], 'gameover': message['gameover']}, room=message['currgameid'])
 
 # Load new game and save old game
 
@@ -295,9 +359,9 @@ def saveGame(message):
     #query = {"gameid": message['currgameid']}
     #newvalues = {"$set": {"fen": message['fen']}}
     if message['currgameid'] != '':
-      leave_room(message['currgameid'])
-      #db['games'].update_one(query, newvalues)
-    query = {"gameid" : message['newgameid']}
+        leave_room(message['currgameid'])
+        #db['games'].update_one(query, newvalues)
+    query = {"gameid": message['newgameid']}
     game = dumps(list(db['games'].find(query)))
     join_room(message['newgameid'])
     emit('load game', game, room=message['newgameid'])
@@ -322,16 +386,18 @@ def addGame(message):
         newgame['player_1'] = message['p1']
         newgame['player_2'] = message['p2']
         db['games'].insert_one(newgame)
-    emit('add game', {'gameid' : message['gameid'], 'p1' : message['p1'], 'p2' : message['p2'],
-        'invalidgameid' : invalidGameId, 'invalidplayer2' : invalidPlayer2}, broadcast=True)
+    emit('add game', {'gameid': message['gameid'], 'p1': message['p1'], 'p2': message['p2'],
+                      'invalidgameid': invalidGameId, 'invalidplayer2': invalidPlayer2}, broadcast=True)
 
 # Fill in the games list for all games user is in
+
+
 @socketio.on('get games')
 def broadcastGames(message):
-    query = {"$or" : [{"player_1" : message['userId']}, {"player_2" : message['userId']}]}
+    query = {"$or": [{"player_1": message['userId']},
+                     {"player_2": message['userId']}]}
     gameslist = dumps(list(db['games'].find(query)))
     emit('send games', gameslist)
-    
 
 
 if __name__ == "__main__":
