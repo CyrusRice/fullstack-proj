@@ -120,6 +120,19 @@ socket.on("populateFriendsList", (data) => {
   friendsList.forEach(function (friendData) {
     addFriendToTable(friendData);
   });
+  getCommunities()
+  //socket.emit('get games', {})
+});
+
+socket.on("populateCommunitiesList", (data) => {
+  let communitiesList = [];
+  for (const [communityId, communityData] of Object.entries(data)) {
+    communitiesList.push(communityData);
+  }
+  communitiesList.sort((a, b) => (a.name > b.name ? 1 : -1));
+  communitiesList.forEach(function (communityData) {
+    addCommunityToTable(communityData);
+  });
   //socket.emit('get games', {})
 });
 

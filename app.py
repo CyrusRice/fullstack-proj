@@ -117,6 +117,13 @@ def createAccount():
         flash(msg)
         return redirect(url_for('signup'))
 
+@socketio.on('getCommunities')
+def getCommunities(data):
+    sender = data['sender']
+    senderCount = db['users'].count_documents({'userid': sender})
+    if senderCount > 0:
+        data = getCommnunitiesListDoc(sender, clients)
+        socketio.emit('populateCommunitiesList', data, room=request.sid)
 
 @socketio.on('getFriends')
 def getFriends(data):
@@ -186,34 +193,31 @@ def createCommunity(data):
     owner = data['owner']
     members = data['members']
     communityid = data['communityid']
+    name = data['name']
     communitytype = data['communitytype']
     communityQuery = {
         '$and': [{'type': communitytype}, {'communityid': communityid}]}
     communityCount = db['communities'].count_documents(communityQuery)
     if communityCount == 0:
         createNewCommunityDoc(
-                    communitytype, communityid, owner, members)
+                    communitytype, communityid, owner, members, name)
         communityDoc = db['communities'].find_one(communityQuery)
         results = communityDoc['results']
         members = communityDoc['members']
+        membernames = communityDoc['membernames']
         membership = communityDoc['membership']
+        communityname = communityDoc['communityid']
+        if 'name' in communityDoc.keys():
+            communityname = communityDoc['name']
         for member in members:
+            memberData = updateCommunitiesListDoc(member,communityDoc,clients,'create')
             if member in clients:
-                memberData = dict()
-                memberData['communityid'] = communityDoc['communityid']
-                memberData['members'] = members
-                memberData['owner'] = communityDoc['owner']
-                memberData['wins'] = 0
-                memberData['losses'] = 0
-                memberData['draws'] = 0
-                memberData['membership'] =membership[member]
-                for opponent in [x for x in newcommunity['members'] if x != member]:
-                    memberData['wins'] += results[member][opponent]['wins']
-                    memberData['losses'] += results[member][opponent]['losses']
-                    memberData['draws'] += results[member][opponent]['draws']
                 for memberSocket in clients[member]:
                     socketio.emit('addCommunityToTable',
                                   memberData, room=memberSocket)
+    else:
+        msg = "communityID = " + communityid + " already exits"
+        socketio.emit('alertUser', {'message': msg}, room=request.sid)        
 @socketio.on('addFriend')
 def addFriend(data):
     sender = data['sender']
