@@ -2,8 +2,8 @@
 <div class="home">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-9 border">
-        <h2>COMUNITY NEWS</h2>
+      <div class="col border" id="communityNews">
+        <h2>COMMUNITY NEWS</h2>
         <hr class="mt-3 mb-3" />
         <h1><u>Most Happening Communities</u></h1>
         <div id="accordion">
@@ -17,8 +17,8 @@
                   aria-expanded="false"
                   aria-controls="collapseOne"
                   id="communitnewsG1Name"
-                >
-                  <strong>Portland State Vikings:</strong> hosted a total of
+                >Portland State Vikings
+                  <strong>:</strong> hosted a total of
                   <strong>677</strong> chess games
                 </button>
               </h5>
@@ -50,7 +50,7 @@
                   played <strong>35</strong> chess games, won
                   <strong style="color: green">15</strong> lost
                   <strong style="color: red">18</strong> and had
-                  <strong>1</strong> draws
+                  <strong>2</strong> draws
                 </p>
               </div>
             </div>
@@ -97,7 +97,7 @@
                   played <strong>35</strong> chess games, won
                   <strong style="color: green">15</strong> lost
                   <strong style="color: red">18</strong> and had
-                  <strong>1</strong> draws
+                  <strong>2</strong> draws
                 </p>
               </div>
             </div>
@@ -126,35 +126,52 @@
             >
               <div class="card-body">
                 <p>
-                  <u><strong id="communitynewsG2P1Name">Player4:</strong></u>
+                  <u><strong id="communitynewsG3P1Name">Player4:</strong></u>
                   played <strong>57</strong> chess games, won
                   <strong style="color: green">29</strong> lost
                   <strong style="color: red">17</strong> and had
                   <strong>11</strong> draws
                 </p>
                 <p>
-                  <u><strong id="communitynewsG2P2Name">Player5:</strong></u>
+                  <u><strong id="communitynewsG3P2Name">Player5:</strong></u>
                   played <strong>49</strong> chess games, won
                   <strong style="color: green">22</strong> lost
                   <strong style="color: red">15</strong> and had
                   <strong>12</strong> draws
                 </p>
                 <p>
-                  <u><strong id="communitynewsG2P3Name">Player6:</strong></u>
+                  <u><strong id="communitynewsG3P3Name">Player6:</strong></u>
                   played <strong>35</strong> chess games, won
                   <strong style="color: green">15</strong> lost
                   <strong style="color: red">18</strong> and had
-                  <strong>1</strong> draws
+                  <strong>2</strong> draws
                 </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-3 border">
+      <div class=" col border">
         <form action="/signin" method="post" id="loginForm">
           <h2>LOGIN</h2>
           <hr class="mt-3 mb-3" />
+          {% with messages = get_flashed_messages() %} {% if messages %} {% for
+          message in messages %}
+          <div
+            class="alert alert-danger alert-dismissible fade show"
+            role="alert"
+          >
+            {{message}}
+            <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          {% endfor %} {% endif %} {% endwith %}
           <div class="form-group">
             <label for="userid" hidden>userid</label>
             <input

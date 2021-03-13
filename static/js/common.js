@@ -44,7 +44,7 @@ function alertUserWithModal(
   if (noButton !== null) {
     noButtonEl.innerHTML = noButton;
     noButtonEl.style.display = "block";
-    noButtonEl.value = yesResponseId;
+    noButtonEl.value = noResponseId;
   } else {
     noButtonEl.innerHTML = "";
     noButtonEl.style.display = "none";
@@ -79,7 +79,6 @@ function getSelectedFrom(table) {
   for (i = 0; i < rowCount; i++) {
     let row = table.rows[i];
     let tagName = row.id;
-    console.log(tagName);
     let cb = document.getElementById(tagName + "_cb");
     if (cb.checked === true) {
       selectedRows.splice(0, 0, tagName);
@@ -120,30 +119,9 @@ function closeUserAlertModal() {
   document.getElementById("alertUserCloseButton").click();
 }
 
-function sortTable(table, col, hideCols = []) {
-  let rows = table.rows;
-
-  let arr = new Array();
-  for (i = 0; i < rows.length; i++) {
-    arr[i] = new Array();
-    let cells = rows[i].cells;
-    for (j = 0; j < cells.length; j++) {
-      arr[i][j] = cells[j].innerHTML;
-    }
-  }
-
-  arr.sort((a, b) => (a[col] > b[col] ? 1 : -1));
-  for (i = 0; i < rows.length; i++) {
-    arr[i] = "<td>" + arr[i].join("</td><td>") + "</td>";
-  }
-  table.innerHTML = "<tr>" + arr.join("</tr><tr>") + "</tr>";
-  hideColumnsOfTable(table, hideCols);
-}
-
 function hideColumnsOfTable(table, cols = []) {
   elType = table.tagName.toLowerCase();
   let targetTable = table;
-  console.log(targetTable.tagName.toLowerCase());
   if (elType === "tbody") {
     targetTable = table.parentElement;
   }
@@ -171,4 +149,47 @@ function showColumnsOfTable(table, cols = []) {
         row.cells[col].style.display = "block";
       });
     });
+}
+function clearSelectionFrom(table) {
+  let rowCount = table.rows.length;    
+  let i;
+  for(i=0;i<rowCount;i++){
+    let row = table.rows[i];
+    let tagName = row.id;
+    let cb = document.getElementById(tagName + "_cb");
+    cb.checked = false;
+  }
+}
+
+function selectAllFrom(table) {
+  let rowCount = table.rows.length;    
+  let i;
+  for(i=0;i<rowCount;i++){
+    let row = table.rows[i];
+    let tagName = row.id;
+    let cb = document.getElementById(tagName + "_cb");
+    cb.checked = true;
+  }
+}
+
+function enableAllFrom(table) {
+let rowCount = table.rows.length;    
+let i;
+for(i=0;i<rowCount;i++){
+  let row = table.rows[i];
+  let tagName = row.id;
+  let cb = document.getElementById(tagName + "_cb");
+  cb.disabled = false;
+}
+}
+
+function disableAllFrom(table) {
+let rowCount = table.rows.length;    
+let i;
+for(i=0;i<rowCount;i++){
+  let row = table.rows[i];
+  let tagName = row.id;
+  let cb = document.getElementById(tagName + "_cb");
+  cb.disabled = true;
+}
 }

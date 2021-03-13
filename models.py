@@ -4,7 +4,10 @@ from collections import OrderedDict
 from common import *
 import random
 
-dbclient = MongoClient("mongodb://localhost:27017/")
+import os
+
+#dbclient = MongoClient("mongodb+srv://user:pass@onboardgames.xuuxa.mongodb.net/OnBoardGames?retryWrites=true&w=majority")
+dbclient = MongoClient(os.getenv("MONGODB_URI","mongodb://127.0.0.1:27017/OnBoardGames"))
 db = dbclient["OnBoardGames"]
 
 dbModels = dict()

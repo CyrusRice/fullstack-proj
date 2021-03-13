@@ -12,6 +12,11 @@
     <input id="addFriendSender" name="sender" type="hidden" value="" />
     <input id="addFriendReceiver" name="receiver" type="hidden" value="" />
   </form>
+  <form id="createCommunity">
+    <input id="createCommunitySender" name="sender" type="hidden" value="" />
+    <input id="createCommunityId" name="communityId" type="hidden" value="" />
+    <input id="createCommunityName" name="communityName" type="hidden" value="" />
+  </form>
   <form id="acceptFriend">
     <input id="acceptFriendSender" name="sender" type="hidden" value="" />
     <input id="acceptFriendReceiver" name="receiver" type="hidden" value="" />
@@ -20,11 +25,12 @@
     <input id="getFriendsSender" name="sender" type="hidden" value="" />
   </form>
   <button type="button" id = "addFriendYesButton" class="btn btn-primary" onclick=addFriend() hidden>addFriendYes</button>
-  <button type="button" id = "acceptFriendYesButton" class="btn btn-primary" onclick=acceptFriendRequest() hidden>addFriendYes</button>
-  <button type="button" id = "acceptFriendNoButton" class="btn btn-primary" onclick=rejectFriendRequest() hidden>addFriendYes</button> 
+  <button type="button" id = "createCommunityYesButton" class="btn btn-primary" onclick=createCommunity() hidden>createCommunityYes</button>
+  <button type="button" id = "acceptFriendYesButton" class="btn btn-primary" onclick=acceptFriendRequest() hidden>acceptFriendYes</button>
+  <button type="button" id = "acceptFriendNoButton" class="btn btn-primary" onclick=rejectFriendRequest() hidden>acceptFriendNo</button> 
   <div class="container-fluid">
     <div class="row">
-      <div class="col-9 border">
+      <div class="col border">
         <h2>GAME ARENA</h2>
         <hr class="mt-4 mb-3" />
         <div id="myBoard" class="ml-3" style="width: 30%;display:none"></div>
@@ -32,7 +38,7 @@
           End Game
         </button>
       </div>
-      <div class="col-3 border">
+      <div class="col border">
         <div class="input-group mb-0">
           <label for="search-input" hidden>search-input</label>
           <input
@@ -159,6 +165,7 @@
               class="btn btn-primary float-right mr-2 mt-1"
               title="createCommunity-button"
               style="background-color:green;"
+              onclick="createCommunityUsingModal()"
             >
               <span>Create</span>
             </button>
@@ -199,6 +206,8 @@
                   <tr>
                     <th style="display: none;" id="communityListSelectHeader">select</th>
                     <th style="width: 70%">Name</th>
+                    <th style="display: none;" id="communityListRequestStatusHeader">requestStatus</th>
+                    <th style="display: none;" id="communityListMembersHeader">members</th>
                     <th>W</th>
                     <th>L</th>
                     <th>D</th>

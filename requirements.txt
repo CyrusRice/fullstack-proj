@@ -7,6 +7,7 @@ cffi==1.14.5; platform_python_implementation == "CPython" and sys_platform == "w
 chardet==4.0.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
 click==7.1.2; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
 cryptography==3.4.6; python_version >= "3.6"
+dnspython==2.1.0; python_version >= "3.6"
 flask-babel==2.0.0
 flask-bcrypt==0.7.1
 flask-login==0.5.0
@@ -17,6 +18,7 @@ flask==1.1.2; (python_version >= "2.7" and python_full_version < "3.0.0") or (py
 gevent-websocket==0.10.1
 gevent==21.1.2; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.5.0")
 greenlet==1.0.0; python_version >= "2.7" and python_full_version < "3.0.0" and platform_python_implementation == "CPython" or python_full_version >= "3.5.0" and platform_python_implementation == "CPython"
+gunicorn==20.0.4; python_version >= "3.4"
 http-ece==1.1.0
 idna==2.10; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
 itsdangerous==1.1.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
