@@ -28,6 +28,10 @@ def home():
 def about():
     return render_template("about.html", sync_mode=socketio.async_mode)
 
+@app.route('/rules')
+def rules():
+    return render_template("rules.html", sync_mode=socketio.async_mode)
+
 
 @app.route('/signup')
 def signup():
