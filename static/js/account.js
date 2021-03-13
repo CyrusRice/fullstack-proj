@@ -1,6 +1,7 @@
 const home = document.getElementById("home");
 const about = document.getElementById("about");
 const accountOwner = document.getElementById("accountOwner");
+let communityData;
 
 const friendListSelectHeader = document.getElementById(
   "friendListSelectHeader"
@@ -18,15 +19,14 @@ const friendListGameStatusHeader = document.getElementById(
 const communityListSelectHeader = document.getElementById(
   "communityListSelectHeader"
 );
-const communityListRequestStatusHeader = document.getElementById(
-  "communityListRequestStatusHeader"
+const communityListMembershipHeader = document.getElementById(
+  "communityListMembershipHeader"
 );
 const communityListMembersHeader = document.getElementById(
   "communityListMembersHeader"
 );
 const communityTab = document.getElementById("CommunitiesTab");
 const friendsTab = document.getElementById("friendsTab");
-
 
 window.addEventListener("storage", function (event) {
   if (event.key == "logout-event") {
@@ -64,7 +64,7 @@ function removeSelectedFriends() {
       "black"
     );
   } else {
-    clearSelectionFrom(table)
+    clearSelectionFrom(table);
     hideColumnsOfTable(table, [0]);
     friendListSelectHeader.innerHTML = "Select";
     friendListSelectHeader.style.backgroundColor = "lightblue";
@@ -91,9 +91,9 @@ function deleteFriends() {
 
 function addFriendUsingModal() {
   let table = document
-  .getElementById("friends-table")
-  .getElementsByTagName("tbody")[0];
-  clearSelectionFrom(table)
+    .getElementById("friends-table")
+    .getElementsByTagName("tbody")[0];
+  clearSelectionFrom(table);
   hideColumnsOfTable(table, [0]);
   alertUserWithModal(
     "Please enter a Friend's ID",
@@ -108,10 +108,10 @@ function addFriendUsingModal() {
 
 function createCommunityUsingModal() {
   let table = document
-  .getElementById("friends-table")
-  .getElementsByTagName("tbody")[0];
-  clearSelectionFrom(table)
-  hideColumnsOfTable(table, [0]);  
+    .getElementById("friends-table")
+    .getElementsByTagName("tbody")[0];
+  clearSelectionFrom(table);
+  hideColumnsOfTable(table, [0]);
   alertUserWithModal(
     "Please enter a <strong> CommunityID,CommunityName </strong> <div> Then <strong>Select</strong> members from <strong>FriendsList</strong></div>",
     "black",
@@ -129,11 +129,14 @@ function createCommunity() {
     .getElementsByTagName("tbody")[0];
   let userResponse = formToDict(document.forms["alertUserInputForm"]);
   let communityId = null;
+  let communityName = null;
   if (
     userResponse["alertUserInputData"] !== "" &&
     userResponse["alertUserResponse"] === "yes"
   ) {
-    communityId = userResponse["alertUserInputData"];
+    [communityId, communityName] = userResponse["alertUserInputData"].split(
+      ","
+    );
   }
 
   let sender = accountOwner.innerHTML;
@@ -143,8 +146,12 @@ function createCommunity() {
         communityId
     );
   } else if (communityId !== null) {
+    if (communityName === null || communityName === "") {
+      communityName = communityId;
+    }
     document.getElementById("createCommunitySender").value = sender;
     document.getElementById("createCommunityId").value = communityId;
+    document.getElementById("createCommunityName").value = communityName;
     selectMembersToAdd();
   } else {
     document.getElementById("createCommunitySender").value = "";
@@ -157,13 +164,14 @@ function createCommunity() {
 }
 function addSelectedToCommunity() {
   let communityId = document.getElementById("createCommunityId").value;
+  let communityName = document.getElementById("createCommunityName").value;
   let sender = accountOwner.innerHTML;
   let table = document
     .getElementById("friends-table")
     .getElementsByTagName("tbody")[0];
   let members = getSelectedFrom(table);
   members.push(sender);
-  clearSelectionFrom(table)
+  clearSelectionFrom(table);
   hideColumnsOfTable(table, [0]);
   friendListSelectHeader.innerHTML = "Select";
   friendListSelectHeader.style.backgroundColor = "lightblue";
@@ -176,6 +184,7 @@ function addSelectedToCommunity() {
     owner: sender,
     members: members,
     communityid: communityId,
+    name: communityName,
     communitytype: "group",
   };
   clientSocketEmit("createCommunity", data);
@@ -250,13 +259,18 @@ function addFriend() {
   }
 }
 
+function getCommunities() {
+  data = { sender: accountOwner.innerHTML };
+  clientSocketEmit("getCommunities", data);
+}
 function getFriends() {
-  home.innerHTML = ""
+  home.innerHTML = "";
   about.innerHTML = "";
   friendListSelectHeader.innerHTML = "";
   friendListRequestStatusHeader.innerHTML = "";
   friendListOnlineStatusHeader.innerHTML = "";
   friendListGameStatusHeader.innerHTML = "";
+  communityData = {};
   document.getElementById("getFriendsSender").value = accountOwner.innerHTML;
   data = formToDict(document.forms["getFriends"]);
   clientSocketEmit("getFriends", data);
@@ -303,7 +317,73 @@ function sortFriendsListTable() {
     .getElementsByTagName("tbody")[0];
   sortTable(table, 1, [0, 2, 3, 4]);
 }
+function addCommunityToTable(data) {
+  let table = document
+    .getElementById("communities-table")
+    .getElementsByTagName("tbody")[0];
+  console.log(data);
+  let communityId = data["id"];
+  if (getRowIndexByTagName(table, communityId) === -1) {
+    let row = table.insertRow();
+    row.id = communityId;
 
+    let selectrow = row.insertCell(0);
+    let cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.id = communityId + "_cb";
+    selectrow.appendChild(cb);
+    selectrow.style.display = "none";
+
+    let rowCommunityName = row.insertCell(1);
+    rowCommunityName.innerHTML =
+      '<strong id="' + communityId + '_name">' + data["name"] + "</strong>";
+
+    let rowOpponents = row.insertCell(2);
+    let opponents = document.createElement("select");
+    opponents.id = communityId + "_opp";
+    opponents.addEventListener("change", function () {
+      updateCommunityResults(communityId);
+    });
+    let option = document.createElement("option");
+    option.value = "All Members";
+    option.text = "All Members";
+    opponents.appendChild(option);
+
+    communityData[communityId] = data;
+    for (const opponent of data["opponents"]) {
+      let option = document.createElement("option");
+      option.value = opponent;
+      option.text = data["opponentnames"][opponent];
+      opponents.appendChild(option);
+    }
+    rowOpponents.appendChild(opponents);
+
+    let rowMembershipStatus = row.insertCell(3);
+    rowMembershipStatus.innerHTML = data["membership"];
+    rowMembershipStatus.style.display = "none";
+
+    let rowWins = row.insertCell(4);
+    rowWins.innerHTML = '<span id = "' + communityId + '_wins">';
+
+    let rowLosses = row.insertCell(5);
+    rowLosses.innerHTML = '<span id = "' + communityId + '_losses">';
+
+    let rowDraws = row.insertCell(6);
+    rowDraws.innerHTML = '<span id = "' + communityId + '_draws"></span>';
+
+    updateCommunityResults(communityId);
+  }
+}
+
+function updateCommunityResults(communityId) {
+  let opponent = document.getElementById(communityId + "_opp").value;
+  let winsEl = document.getElementById(communityId + "_wins");
+  let lossesEl = document.getElementById(communityId + "_losses");
+  let drawsEl = document.getElementById(communityId + "_draws");
+  winsEl.innerHTML = communityData[communityId]["wins"][opponent];
+  lossesEl.innerHTML = communityData[communityId]["losses"][opponent];
+  drawsEl.innerHTML = communityData[communityId]["draws"][opponent];
+}
 function addFriendToTable(data) {
   let table = document
     .getElementById("friends-table")
