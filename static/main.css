@@ -5,6 +5,12 @@ body {
   color:black;
 }
 
+@media only screen and (max-width: 750px) {
+  #communityNews,#home,#about {
+      display: none;
+  }
+}
+
 /*
    * Formatting the header area
    */
@@ -27,7 +33,7 @@ header {
 
 header h1.logo {
   margin: 0;
-  font-size: 1.7em;
+  font-size: 30px;
   color: #fff;
   text-transform: uppercase;
   float: left;
@@ -54,7 +60,7 @@ div.about {
 }
 
 h2 {
-  font-size: 3em;
+  font-size: 45px;
   margin-top: 40px;
   text-align: center;
   letter-spacing: -2px;

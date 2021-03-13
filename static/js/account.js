@@ -27,14 +27,6 @@ const communityListMembersHeader = document.getElementById(
 const communityTab = document.getElementById("CommunitiesTab");
 const friendsTab = document.getElementById("friendsTab");
 
-window.onload = function () {
-  home.innerHTML = "";
-  about.innerHTML = "";
-  friendListSelectHeader.innerHTML = "";
-  friendListRequestStatusHeader.innerHTML = "";
-  friendListOnlineStatusHeader.innerHTML = "";
-  friendListGameStatusHeader.innerHTML = "";
-};
 
 window.addEventListener("storage", function (event) {
   if (event.key == "logout-event") {
@@ -259,6 +251,12 @@ function addFriend() {
 }
 
 function getFriends() {
+  home.innerHTML = ""
+  about.innerHTML = "";
+  friendListSelectHeader.innerHTML = "";
+  friendListRequestStatusHeader.innerHTML = "";
+  friendListOnlineStatusHeader.innerHTML = "";
+  friendListGameStatusHeader.innerHTML = "";
   document.getElementById("getFriendsSender").value = accountOwner.innerHTML;
   data = formToDict(document.forms["getFriends"]);
   clientSocketEmit("getFriends", data);
