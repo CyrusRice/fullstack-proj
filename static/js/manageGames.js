@@ -63,7 +63,7 @@ let config = {
     //console.log(document.getElementById('gameslist').value);
     //alertUserWithModal("Game Over");
     gameOver = true;
-    updateBoard();
+    updateBoard(false);
   })
   
   // When player makes move, validate it before accepting
@@ -76,16 +76,18 @@ let config = {
     // Stop board movement if game over
     if (chess.game_over())
       gameOver = true;
-    updateBoard();
+    updateBoard(true);
   }
   
   // Update board for all when one player moves (will change to only 
   // update for people in the same game)
-  function updateBoard() {
+  function updateBoard(won) {
     clientSocketEmit("update board", {
       fen: chess.fen(),
       currgameid: currGameId,
       gameover: gameOver,
+      userid: document.getElementById('accountOwner').textContent,
+      won: won,
     });
   }
   //===========================================Chess Related Code(END)=========================

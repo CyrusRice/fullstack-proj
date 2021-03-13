@@ -347,9 +347,31 @@ def disconnect():
 @socketio.on('update board')
 def broadcastFen(message):
     query = {"gameid": message['currgameid']}
+    game = db['games'].find_one(query)
+    p1 = game['player_1']
+    p2 = game['player_2']
     newvalues = {"$set": {"fen": message['fen']}}
     if message['gameover'] == True:
+        winner = ''
+        loser = ''
+        if message['won'] == True:
+            winner = message['userid']
+            if message['userid'] == p1:
+                loser = p2
+            else:
+                loser = p1
+        else:
+            loser = message['userid']
+            if message['userid'] == p1:
+                winner = p2
+            else:
+                winner = p1
+        wins = db['users'].find_one({'userid' : winner})['stats']['1:1']['wins'] + 1
+        losses = db['users'].find_one({'userid' : loser})['stats']['1:1']['losses'] + 1
+        db['users'].update_one({'userid' : winner}, {"$set": {"stats.1:1.wins": wins}})
+        db['users'].update_one({'userid' : loser}, {"$set": {"stats.1:1.losses": losses}})
         db['games'].delete_one(query)
+
     else:
         db['games'].update_one(query, newvalues)
     emit('broadcast fen', {
