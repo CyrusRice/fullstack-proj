@@ -1,5 +1,5 @@
-# fullstack-proj Winter 2021: Online Chess App with Python-Flask
-  # By Vinodh Kotipalli and Cyrus Rice
+# fullstack-proj Winter 2021: Online Chess App
+  By Vinodh Kotipalli and Cyrus Rice
 - Link to deployed app on heroku 
     - https://onboardchess.herokuapp.com/
 - List of references and tutorials used
