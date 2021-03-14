@@ -8,6 +8,7 @@
 <script defer src="/static/js/manageGames.js"></script>
 <script defer src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 <div class="account">
+  <li hidden><a id="accessDenied" href="{{ url_for('home') }}" hidden>AcessDenied</a></li>
   <form id="addFriend">
     <input id="addFriendSender" name="sender" type="hidden" value="" />
     <input id="addFriendReceiver" name="receiver" type="hidden" value="" />
@@ -28,6 +29,8 @@
   <button type="button" id = "createCommunityYesButton" class="btn btn-primary" onclick=createCommunity() hidden>createCommunityYes</button>
   <button type="button" id = "acceptFriendYesButton" class="btn btn-primary" onclick=acceptFriendRequest() hidden>acceptFriendYes</button>
   <button type="button" id = "acceptFriendNoButton" class="btn btn-primary" onclick=rejectFriendRequest() hidden>acceptFriendNo</button> 
+  <button type="button" id = "acceptCommunityYesButton" class="btn btn-primary" hidden>acceptCommunityYes</button>
+  <button type="button" id = "acceptCommunityNoButton" class="btn btn-primary"  hidden>acceptCommunityNo</button> 
   <div class="container-fluid">
     <div class="row">
       <div class="col border">
@@ -82,6 +85,7 @@
               class="nav-link active"
               id="friendsTab"
               data-toggle="tab"
+              style="font-weight:bold;color:black"
               href="#friends"
               >Friends</a
             >
@@ -92,11 +96,17 @@
               id="CommunitiesTab"
               data-toggle="tab"
               href="#communities"
+              style="font-weight:bold;color:black"
               >Communities</a
             >
           </li>
           <li class="nav-item" role="presentation">
-            <a class="nav-link" id="gamesTab" data-toggle="tab" href="#games"
+            <a 
+              class="nav-link" 
+              id="gamesTab" 
+              data-toggle="tab" 
+              href="#games"
+              style="font-weight:bold;color:black"
               >Games</a
             >
           </li>
@@ -167,7 +177,7 @@
               style="background-color:green;"
               onclick="createCommunityUsingModal()"
             >
-              <span>Create</span>
+            <span class="fas fa-users fa-1x"></span>
             </button>
             <button
               id="deleteCommunity-button"
@@ -175,9 +185,10 @@
               class="btn btn-primary float-right mr-2 mt-1 mb-1"
               title="deleteCommunity-button"
               style="background-color:brown;"
+              
             >
-              <span>Delete</span>
-            </button>
+            <span class="fas fa-minus-circle fa-1x"></span>
+          </button>
             <button
               id="joinCommunity-button"
               type="button"
@@ -185,7 +196,7 @@
               title="joinCommunity-button"
               style="background-color:green;"
             >
-              <span>Join</span>
+            <span class="fas fa-people-arrows fa-1x"></span>
             </button>
             <button
               id="leaveCommunity-button"
@@ -194,7 +205,7 @@
               title="leaveCommunity-button"
               style="background-color:brown;"
             >
-              <span>Leave</span>
+            <span class="fas fa-walking fa-1x"></span>
             </button>            
             </br>      
             <div class="table-wrapper-scroll-y my-custom-scrollbar mt-4">
@@ -227,6 +238,7 @@
             Games Tab content
             <form action="/loadGame" method="post" id="loadGameForm">
               <p>Join a Game:</p>
+              <label for="gameslist" hidden>gameslist</label>
               <select name="gameslist" id="gameslist"></select>
               <hr />
               <input
@@ -238,7 +250,9 @@
             </form>
             <form action="/addGame" method="post" id="addGameForm">
               <p>Create a Game:</p>
+              <label for="gameId" hidden>gameId</label>
               <input type="text" id="gameId" name='gameId' placeholder="Enter game id here"/><hr>
+              <label for="invitedPlayer" hidden>invitedPlayer</label>
               <input type="text" id="invitedPlayer" name='invitedPlayer' placeholder="Enter invited user's id here"/><hr>
               <input type="button"
               class="btn btn-primary mt-2 mb-5"

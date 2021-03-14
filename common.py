@@ -165,7 +165,7 @@ def getFriendDataFromDoc(sender, friendId, clients):
     return friendData
 
 
-def getCommnunitiesListDoc(sender, clients):
+def getCommunitiesListDoc(sender, clients):
     senderDoc = db['users'].find_one({'userid': sender})
     data = dict()
     for communityid in senderDoc["communityids"]:

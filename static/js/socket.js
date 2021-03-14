@@ -89,7 +89,18 @@ function clientSocketEmit(message, data) {
 }
 
 socket.on("connectionRecorded", () => {
-  getFriends();
+  let user = window.sessionStorage.getItem('login-event');
+  console.log(user)
+  if (user !== null) {
+    user = user.split(":")[0];
+  }
+  if (user === accountOwner.innerHTML) {
+    getFriends();
+  } else {
+    accountAccessDenied(accountOwner.innerHTML)
+
+  }
+  
 });
 
 socket.on("addFriendToTable", (data) => {
