@@ -1,0 +1,314 @@
+{%extends "layout.html"%} {% block content %}
+<body>
+  <h4>
+    Description
+  </h4>
+  <p>
+    This is a full stack chess web app developed by Vinodh Kotipalli and Cyrus Rice in winter 2021.
+    You can create an account, add friends, and play with those friends, among other features. This 
+    app is deployed using Heroku.
+  </p>
+  <h4>
+    Play
+  </h4>
+  <ul>
+    <li>
+      <a href='https://github.com/CyrusRice/fullstack-proj'>Github</a>
+    </li>
+    <li>
+      <a href='https://onboardchess.herokuapp.com/'>Play Here</a>
+    </li>
+  </ul>
+  <h4>
+    Implementation
+  </h4>
+  <ul>
+    <li>
+      <h4>
+        Front-End
+      </h4>
+      <p>
+        The front end was implemented in html, css, and javascript. Below are some javascript libraries that were used.
+      </p>
+      <ul>
+        <li>
+          chess.js
+          <ul>
+            <li>
+              Used to implement chess game logic, such as move validation and board status 
+            </li>
+            <li>
+              <a href="https://github.com/jhlywa/chess.js/blob/master/README.md">
+                Link
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          chessboard.js
+          <ul>
+            <li>
+              Used to display board in html
+            </li>
+            <li>
+              <a href="https://chessboardjs.com/">
+                Link
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          socketio.js
+          <ul>
+            <li>
+              Used to implement web sockets for the client.
+            </li>
+            <li>
+              <a href="https://socket.io/">
+                Link
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <h4>
+        Back-End 
+      </h4>
+      <p>
+        The backend was implemented in Python. Below are some libraries that were used.
+      </p>
+      <ul>
+        <li>
+          flask
+          <ul>
+            <li>
+              Used as backend server. 
+            </li>
+            <li>
+              <a href="https://flask.palletsprojects.com/en/1.1.x/">
+                Link
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          flask-socketio
+          <ul>
+            <li>
+             Used for communicating with front-end sockets
+            </li>
+            <li>
+              <a href="https://flask-socketio.readthedocs.io/en/latest/">
+                Link
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          mongodb
+          <ul>
+            <li>
+             Used to store data such as user and game data
+            </li>
+            <li>
+              <a href="https://www.mongodb.com/3">
+                Link
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          pymongo
+          <ul>
+            <li>
+             Used to communicate with the database from the backend using python
+            </li>
+            <li>
+              <a href="https://pymongo.readthedocs.io/en/stable/">
+                Link
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <h4>
+    Future Work
+  </h4>
+  <p>
+    Due to limited time, there were several features that were left out.
+  </p>
+  <ul>
+    <li>
+      Games
+      <ul>
+        <li>
+          Update 'Games' tab to look like other tabs, use a table to display games
+        </li>
+        <li>
+          Delete game from user game list when the game is finished automatically (currently have to reload page)
+        </li>
+        <li>
+          Update the wins/losses/draws in the users friends list
+        </li>
+        <li>
+          Add draw button to declare game a draw
+        </li>
+        <li>
+          Better user game experience (tell user when game loaded for instance)
+        </li>
+        <li>
+          Allow user to create game with a friend using the friends list
+        </li>
+        <li>
+          Allow people to play games without having an account
+        </li>
+        <li>
+          Make games timed
+        </li>
+      </ul>
+      Other
+      <ul>
+        <li>
+          Add search feature + user/community privacy settings
+        </li>
+        <li>
+          Add message feature for 1:1 IM's and community forums
+        </li>
+        <li>
+          Add features to create, organize, and register online tournaments
+        </li>
+        <li>
+          Extend application to include more board games
+        </li>
+      </ul>
+    </li>
+  </ul>
+</body>
+<body>
+    <h4>
+      Rules
+    </h4>
+    <p>
+      On this page you can find some basic chess rules to help you get started
+    </p>
+    <h4>
+      Basic Rules
+    </h4>
+    <h4>
+      Pieces
+    </h4>
+    <table cellpadding="10" cellspacing="5" border="2" bgcolor="#efefef">
+      <tr>
+        <th>
+          Piece
+        </th>
+        <th>
+          Legal Move
+        </th>
+        <th>
+          Legal Attack
+        </th>
+        <th>
+          Special
+        </th>
+      </tr>
+      <tr>
+        <td>
+          Pawn
+        </td>
+        <td>
+          Up 1 square
+        </td>
+        <td>
+          Upper-Left or Upper-Right 1 square
+        </td>
+        <td>
+          On pawns first move, can move 2 squares forward
+        </td>
+      </tr>
+      <tr>
+        <td>
+          King
+        </td>
+        <td>
+          1 square in all directions
+        </td>
+        <td>
+          Same as move
+        </td>
+        <td>
+          Can't move into/must move out of a checkmate position
+          Castling - if rook and king in original positions, the king is moved two squares toward the rook, 
+          and the rook moves past the king to the square right next to where the king has moved.  
+        </td>
+      </tr>
+      <tr>
+          <td>
+            Queen
+          </td>
+          <td>
+            Unlimited squares in any direction
+          </td>
+          <td>
+            Unlimited squares in any direction
+          </td>
+          <td>
+            n/a     
+          </td>
+      </tr>
+      <tr>
+          <td>
+            Knight
+          </td>
+          <td>
+            up/down 1 left 2 
+            up/down 1 right 2
+            right/left 1 up 2
+            right/left 1 down 2
+          </td>
+          <td>
+            Same as move
+          </td>
+          <td>
+            n/a    
+          </td>
+      </tr>
+      <tr>
+          <td>
+            Bishop
+          </td>
+          <td>
+            Diagonal in any direction unlimited squares
+          </td>
+          <td>
+            Same as move
+          </td>
+          <td>
+            n/a 
+          </td>
+      </tr>
+      <tr>
+          <td>
+            Rook
+          </td>
+          <td>
+            Straight in any direction unlimited squares
+          </td>
+          <td>
+            Same as move
+          </td>
+          <td>
+            Castling - if rook and king in original positions, the king is moved two squares toward the rook, 
+            and the rook moves past the king to the square right next to where the king has moved.  
+          </td>
+      </tr>
+  
+    </table>
+  </body>
+<div class="about">
+  <div>{%endblock%}</div>
+</div>
