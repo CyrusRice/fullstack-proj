@@ -10,6 +10,11 @@
     - https://blog.miguelgrinberg.com/post/easy-websockets-with-flask-and-gevent
     - https://codepen.io/ace-subido/pen/qELGdd
 
+- Project dependencies
+    - We used chessboard.js for displaying the chess board and handling user interaction 
+    - We used chess.js for validating the moves and determining game completion
+    - Both of this can be installed using `npm install`
+    - For backend we primarily used Python packages Flask, Flask-SocketIO, PyMongo. More detailed information is given in next sections
 
 - Install poetry if you havn't already with below command
     - `curl -SSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python`
