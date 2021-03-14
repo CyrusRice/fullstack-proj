@@ -169,7 +169,7 @@ function updateAccountAccessDeniedLink(user) {
 }
 
 function accountAccessDenied(user) {
-  updateAccountAccessDeniedLink(user)
+  let accessDeniedEl = document.getElementById("accessDenied");
   accessDeniedEl.click();
 }
 
