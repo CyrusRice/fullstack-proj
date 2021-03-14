@@ -38,6 +38,10 @@ def signup():
     return render_template("signup.html", sync_mode=socketio.async_mode)
 
 
+@app.route('/accessDenied/<userid>')
+def accessDenied(userid):
+    return render_template("accessDenied.html", userid=userid, sync_mode=socketio.async_mode)
+
 @app.route('/account/<userid>')
 def account(userid):
     return render_template("account.html", userid=userid, sync_mode=socketio.async_mode)
@@ -126,9 +130,10 @@ def getCommunities(data):
     sender = data['sender']
     senderCount = db['users'].count_documents({'userid': sender})
     if senderCount > 0:
-        data = getCommnunitiesListDoc(sender, clients)
+        data = getCommunitiesListDoc(sender, clients)
         socketio.emit('populateCommunitiesList', data, room=request.sid)
 
+   
 @socketio.on('getFriends')
 def getFriends(data):
     sender = data['sender']

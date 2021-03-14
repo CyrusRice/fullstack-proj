@@ -162,6 +162,17 @@ function createCommunity() {
     document.getElementById("alertUserMessage").innerHTML = msg;
   }
 }
+function updateAccountAccessDeniedLink(user) {
+  let accessDeniedEl = document.getElementById("accessDenied");
+  accessDeniedEl.href =
+    accessDeniedEl.href + "accessDenied/" + user;
+}
+
+function accountAccessDenied(user) {
+  let accessDeniedEl = document.getElementById("accessDenied");
+  accessDeniedEl.click();
+}
+
 function addSelectedToCommunity() {
   let communityId = document.getElementById("createCommunityId").value;
   let communityName = document.getElementById("createCommunityName").value;
@@ -372,6 +383,24 @@ function addCommunityToTable(data) {
     rowDraws.innerHTML = '<span id = "' + communityId + '_draws"></span>';
 
     updateCommunityResults(communityId);
+
+    [rowCommunityName, rowWins, rowLosses, rowDraws].forEach(function (cellEl) {
+      cellEl.addEventListener("click", function () {
+        communityRowOnClick(communityId);
+      });
+    });
+  }
+}
+
+function communityRowOnClick(communityId) {
+  let table = document
+    .getElementById("communities-table")
+    .getElementsByTagName("tbody")[0];
+  let rowIndex = getRowIndexByTagName(table, communityId);
+  if (rowIndex > -1) {
+    let MembershipStatus = table.rows[rowIndex].cells[3].innerHTML;
+    let communityName = document.getElementById(communityId + "_name")
+      .innerHTML;
   }
 }
 
