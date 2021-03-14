@@ -1,6 +1,117 @@
 {%extends "layout.html"%} {% block content %}
+<body>
+  <h4>
+    Description
+  </h4>
+  <p>
+    This is a full stack chess web app developed by Vinodh Kotipalli and Cyrus Rice in winter 2021.
+    You can create an account, add friends, and play with those friends, among other features.
+  </p>
+  <h4>
+    Implementation
+  </h4>
+  <h4>
+    Front-End
+  </h4>
+  <ul>
+    <li>
+      chess.js
+      <ul>
+        <li>
+          Used to implement chess game logic, such as move validation and board status 
+        </li>
+        <li>
+          <a href="https://github.com/jhlywa/chess.js/blob/master/README.md">
+            Link
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      chessboard.js
+      <ul>
+        <li>
+          Used to display board in html
+        </li>
+        <li>
+          <a href="https://chessboardjs.com/">
+            Link
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      socketio.js
+      <ul>
+        <li>
+          Used to implement web sockets for the client.
+        </li>
+        <li>
+          <a href="https://socket.io/">
+            Link
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <h4>
+    Back-End
+  </h4>
+  <ul>
+    <li>
+      flask
+      <ul>
+        <li>
+          Used as backend server. 
+        </li>
+        <li>
+          <a href="https://flask.palletsprojects.com/en/1.1.x/">
+            Link
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      flask-socketio
+      <ul>
+        <li>
+         Used for communicating with front-end sockets
+        </li>
+        <li>
+          <a href="https://flask-socketio.readthedocs.io/en/latest/">
+            Link
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      mongodb
+      <ul>
+        <li>
+         Used to store data such as user and game data
+        </li>
+        <li>
+          <a href="https://www.mongodb.com/3">
+            Link
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      pymongo
+      <ul>
+        <li>
+         Used to communicate with the database from the backend using python
+        </li>
+        <li>
+          <a href="https://pymongo.readthedocs.io/en/stable/">
+            Link
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</body>
 <div class="about">
-  <h1>My about page</h1>
-  <p>This is a test website again</p>
   <div>{%endblock%}</div>
 </div>

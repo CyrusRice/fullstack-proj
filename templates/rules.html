@@ -1,0 +1,125 @@
+{%extends "layout.html"%} {% block content %}
+<body>
+  <h4>
+    Rules
+  </h4>
+  <p>
+    On this page you can find some basic chess rules to help you get started
+  </p>
+  <h4>
+    Basic Rules
+  </h4>
+  <h4>
+    Pieces
+  </h4>
+  <table>
+    <tr>
+      <th>
+        Piece
+      </th>
+      <th>
+        Legal Move
+      </th>
+      <th>
+        Legal Attack
+      </th>
+      <th>
+        Special
+      </th>
+    </tr>
+    <tr>
+      <td>
+        Pawn
+      </td>
+      <td>
+        Up 1 square
+      </td>
+      <td>
+        Upper-Left or Upper-Right 1 square
+      </td>
+      <td>
+        On pawns first move, can move 2 squares forward
+      </td>
+    </tr>
+    <tr>
+      <td>
+        King
+      </td>
+      <td>
+        1 square in all directions
+      </td>
+      <td>
+        1 square in all directions
+      </td>
+      <td>
+        Can't move into/must move out of a checkmate position
+        Castling - if rook and king in original positions, the king is moved two squares toward the rook, 
+        and the rook moves past the king to the square right next to where the king has moved.  
+      </td>
+    </tr>
+    <tr>
+        <td>
+          Queen
+        </td>
+        <td>
+          Unlimited squares in any direction
+        </td>
+        <td>
+          Unlimited squares in any direction
+        </td>
+        <td>
+          n/a     
+        </td>
+    </tr>
+    <tr>
+        <td>
+          Knight
+        </td>
+        <td>
+          up/down 1 left 2 
+          up/down 1 right 2
+          right/left 1 up 2
+          right/left 1 down 2
+        </td>
+        <td>
+          Same as move
+        </td>
+        <td>
+          n/a    
+        </td>
+    </tr>
+    <tr>
+        <td>
+          Bishop
+        </td>
+        <td>
+          Diagonal in any direction unlimited squares
+        </td>
+        <td>
+          Diagonal in any direction unlimited squares
+        </td>
+        <td>
+          n/a 
+        </td>
+    </tr>
+    <tr>
+        <td>
+          Rook
+        </td>
+        <td>
+          Straight in any direction unlimited squares
+        </td>
+        <td>
+          Straight in any direction unlimited squares
+        </td>
+        <td>
+          Castling - if rook and king in original positions, the king is moved two squares toward the rook, 
+          and the rook moves past the king to the square right next to where the king has moved.  
+        </td>
+    </tr>
+
+  </table>
+</body>
+<div class="about">
+  <div>{%endblock%}</div>
+</div>
