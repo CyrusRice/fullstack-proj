@@ -167,6 +167,7 @@ function updateAccountAccessDeniedLink(user) {
   accessDeniedEl.href =
     accessDeniedEl.href + "accessDenied/" + user;
 }
+
 function accountAccessDenied(user) {
   updateAccountAccessDeniedLink(user)
   accessDeniedEl.click();
