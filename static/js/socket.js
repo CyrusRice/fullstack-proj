@@ -94,6 +94,7 @@ socket.on("connectionRecorded", () => {
   if (user !== null) {
     user = user.split(":")[0];
   }
+  updateAccountAccessDeniedLink(accountOwner.innerHTML)
   if (user === accountOwner.innerHTML) {
     getFriends();
   } else {

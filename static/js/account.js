@@ -162,10 +162,13 @@ function createCommunity() {
     document.getElementById("alertUserMessage").innerHTML = msg;
   }
 }
-function accountAccessDenied(user) {
+function updateAccountAccessDeniedLink(user) {
   let accessDeniedEl = document.getElementById("accessDenied");
   accessDeniedEl.href =
     accessDeniedEl.href + "accessDenied/" + user;
+}
+function accountAccessDenied(user) {
+  updateAccountAccessDeniedLink(user)
   accessDeniedEl.click();
 }
 
