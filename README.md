@@ -1,4 +1,4 @@
-# fullstack-proj Winter 2021: Online Chess App
+# Fullstack Winter 2021: Online Chess App
   By Vinodh Kotipalli and Cyrus Rice
 - Link to deployed app on heroku 
     - https://onboardchess.herokuapp.com/
